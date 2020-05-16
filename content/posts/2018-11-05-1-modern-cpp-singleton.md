@@ -181,7 +181,7 @@ The following class diagram illustrates this mechanism:
 
 <!-- ![singleton class diagram](/static/assets/img/blog/cpp/singleton_example/singleton.png "Singleton class diagram") -->
 
-<p align="center"> <img src="/static/uploads/cpp_singleton.png"> </p>
+<p align="center"> <img src="/uploads/cpp_singleton.png"> </p>
 
 In this diagram, the instance is a Singleton object belonging to the Singleton class.
 The `get_instance` class method allows to build this instance on the first call, via the private constructor, and to return this same singleton every call.
@@ -197,7 +197,7 @@ We will first focus on the elements essential to any class, constructors and des
 <!-- ![Logger class diagram](/static/assets/img/blog/cpp/singleton_example/logger.png "Logger class diagram") -->
 
 <p align="center">
-<img src="/static/uploads/cpp_logger.png">
+<img src="/uploads/cpp_logger.png">
 </p>
 
 The Logger should be a singleton; its class diagram strongly resembles the singleton ones, and the pattern of the singleton can be figured behind it.
