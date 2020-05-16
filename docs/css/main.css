@@ -12,7 +12,7 @@
 
 html {
   color: #232333;
-  font-family: 'Iosevka Curly', 'Roboto Mono', monospace;
+  font-family: 'Iosevka Curly Web', monospace;
   font-size: 15px;
   line-height: 1.6em;
 }
@@ -30,7 +30,7 @@ body{
 }
 
 p {
-  font-family: 'Iosevka Curly', sans-serif;
+  font-family: 'Iosevka Curly Web', sans-serif;
   line-height: 1.5;
 }
 
@@ -187,7 +187,7 @@ article .title {
 }
 
 .callout p {
-  font-family: 'Iosevka Curly', monospace;
+  font-family: 'Iosevka Curly Web', monospace;
   margin: 0;
 }
 
