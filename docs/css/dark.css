@@ -1,25 +1,25 @@
 body {
-  color: white;
-  background-color: #202124;
+  color: #ffffff;
+  background-color: #323333;
 }
 
 ::-moz-selection {
-  background: blue;
+  background: #292a31;
   color: #fff;
   text-shadow: none;
 }
 
 ::selection {
-  background: red;
+  background: #292a31;
   color: #fff;
   text-shadow: none;
 }
 
 hr {
-  border-top: 3px dotted blue;
+  border-top: 3px dotted var(--hovercolor);
 }
 code {
-  background-color: lightblue;
+  background-color: var(--hovercolor);
   color: black;
   text-decoration: bold;
   padding: 0.1em 0.2em;
@@ -31,7 +31,7 @@ pre {
   padding: 1em;
 }
 blockquote {
-  border-color: blue;
+  border-color: var(--hovercolor);
 }
 
 h1,
@@ -40,7 +40,7 @@ h3,
 h4,
 h5,
 h6 {
-  color: #ddd;
+  color: #dddddd;
 }
 h1::before {
   color: var(--darkMaincolor);
@@ -109,5 +109,5 @@ a:hover {
 }
 .draft-label {
   color: var(--darkMaincolor);
-  background-color: blue;
+  background-color: #5893b7;
 }

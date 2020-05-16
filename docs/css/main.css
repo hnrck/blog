@@ -3,11 +3,11 @@
 
 /* Markdown */
 :root{
---maincolor: red;
---bordercl:rebeccapurple;
---callouctcolor:dodgerblue;
---hovercolor:navy;
---darkMaincolor: #50fa7b;
+  --maincolor: #ff0091;
+  --bordercl: #dd00ff;
+  --callouctcolor: #002bff;
+  --hovercolor: #748eff;
+  --darkMaincolor: #ff0090;
 }
 
 html {
