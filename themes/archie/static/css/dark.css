@@ -1,0 +1,112 @@
+body {
+  color: #ffffff;
+  background-color: #323333;
+}
+
+::-moz-selection {
+  background: #292a31;
+  color: #fff;
+  text-shadow: none;
+}
+
+::selection {
+  background: #292a31;
+  color: #fff;
+  text-shadow: none;
+}
+
+hr {
+  border-top: 3px dotted var(--bordercl);
+}
+code {
+  background-color: var(--hovercolor);
+  color: black;
+  padding: 0.1em 0.2em;
+}
+pre {
+  background-color: #272822;
+  line-height: 1.4;
+  overflow-x: auto;
+  padding: 1em;
+}
+blockquote {
+  border-color: var(--bordercl);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: #dddddd;
+}
+h1::before {
+  color: var(--darkMaincolor);
+  content: "# ";
+}
+h2::before {
+  color: var(--darkMaincolor);
+  content: "## ";
+}
+h3::before {
+  color: var(--darkMaincolor);
+  content: "### ";
+}
+h4::before {
+  color: var(--darkMaincolor);
+  content: "#### ";
+}
+h5::before {
+  color: var(--darkMaincolor);
+  content: "##### ";
+}
+h6::before {
+  color: var(--darkMaincolor);
+  content: "###### ";
+}
+
+a {
+  border-bottom: 3px solid var(--darkMaincolor);
+  color: inherit;
+}
+a:hover {
+  background-color: var(--darkMaincolor);
+  color: black;
+}
+
+.site-description a {
+  color: #ddd;
+}
+.site-description a:hover {
+  color: black;
+}
+
+.tags a {
+  border-bottom: 3px solid var(--darkMaincolor);
+}
+.tags a:hover {
+  background-color: var(--darkMaincolor);
+  color: black;
+}
+
+.site-title a {
+  color: white;
+  text-decoration: none !important;
+}
+
+.header nav,
+.footer {
+  border-color: #333;
+}
+
+.highlight {
+  background-color: #333;
+}
+.soc:hover {
+  color: black;
+}
+.draft-label {
+  color: var(--darkMaincolor);
+  background-color: #5893b7;
+}
