@@ -1,0 +1,7 @@
+baseurl = "http://hnrck.io/blog"
+disableKinds = ["page", "section", "taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT", "404"]
+languageCode = "en-us"
+theme = "archie"
+themesDir = "themes"
+title = "Henrick Deschamps"
+publishDir = "docs"
