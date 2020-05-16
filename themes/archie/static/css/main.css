@@ -16,6 +16,10 @@ html {
   font-size: 15px;
   line-height: 1.6em;
 }
+code {
+  font-family: 'Iosevka Curly Web', monospace;
+}
+
 body{
   display: block;
   margin: 8px;
