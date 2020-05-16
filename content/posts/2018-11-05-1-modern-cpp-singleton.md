@@ -1,63 +1,68 @@
 ---
-title: "Modern C++ singleton implementation through an example"
+title: Modern C++ singleton implementation through an example
 date: 2018-11-05
-description: "This post illustrate the design and implementation of the singleton design pattern with modern C++."
-tags: [c++,c++11,design pattern,singleton,github]
----
+description: This post illustrate the design and implementation of the singleton design
+  pattern with modern C++.
+tags:
+- c++
+- c++11
+- design pattern
+- singleton
+- github
 
-**[tl;dr]** Modern C++ best practices allows an explicit and beautiful implementation of the singleton design pattern.
-
 ---
+**\[tl;dr\]** Modern C++ best practices allows an explicit and beautiful implementation of the singleton design pattern.
+
+***
 
 Code source of the full example available on [hnrck/singleton_example](https://github.com/hnrck/singleton_example).
 
----
+***
 
-Table of Contents
-=================
+# Table of Contents
 
-   * [Motivations](#motivations)
-   * [Context](#context)
-   * [Related work](#related-work)
-      * [Blogs and websites](#blogs-and-websites)
-      * [Books](#books)
-   * [Introduction](#introduction)
-      * [About design patterns](#about-design-patterns)
-      * [The singleton pattern](#the-singleton-pattern)
-         * [Why using a singleton](#why-using-a-singleton)
-         * [How to implement a singleton](#how-to-implement-a-singleton)
-   * [The Logger class](#the-logger-class)
-      * [The Logger class declaration](#the-logger-class-declaration)
-         * [Constructor and assignment](#constructor-and-assignment)
-         * [Copy constructor and assignment](#copy-constructor-and-assignment)
-         * [Move constructor and assignment](#move-constructor-and-assignment)
-      * [Singleton functionality](#singleton-functionality)
-      * [Logger functionality](#logger-functionality)
-         * [Log level](#log-level)
-         * [Print method](#print-method)
-         * [Output setting](#output-setting)
-         * [Output protection](#output-protection)
-         * [Logger class final result](#logger-class-final-result)
-      * [Test application](#test-application)
-         * [Global parameters](#global-parameters)
-         * [Test routine](#test-routine)
-         * [A small exception](#a-small-exception)
-         * [Main function](#main-function)
-         * [Test application final result](#test-application-final-result)
-   * [Experimentation](#experimentation)
-      * [GitHub repository](#github-repository)
-      * [Compilation](#compilation)
-      * [Execution](#execution)
-   * [Conclusion](#conclusion)
-      * [Summary](#summary)
-      * [Limitations](#limitations)
-      * [Future work](#future-work)
+* [Motivations](#motivations)
+* [Context](#context)
+* [Related work](#related-work)
+  * [Blogs and websites](#blogs-and-websites)
+  * [Books](#books)
+* [Introduction](#introduction)
+  * [About design patterns](#about-design-patterns)
+  * [The singleton pattern](#the-singleton-pattern)
+    * [Why using a singleton](#why-using-a-singleton)
+    * [How to implement a singleton](#how-to-implement-a-singleton)
+* [The Logger class](#the-logger-class)
+  * [The Logger class declaration](#the-logger-class-declaration)
+    * [Constructor and assignment](#constructor-and-assignment)
+    * [Copy constructor and assignment](#copy-constructor-and-assignment)
+    * [Move constructor and assignment](#move-constructor-and-assignment)
+  * [Singleton functionality](#singleton-functionality)
+  * [Logger functionality](#logger-functionality)
+    * [Log level](#log-level)
+    * [Print method](#print-method)
+    * [Output setting](#output-setting)
+    * [Output protection](#output-protection)
+    * [Logger class final result](#logger-class-final-result)
+  * [Test application](#test-application)
+    * [Global parameters](#global-parameters)
+    * [Test routine](#test-routine)
+    * [A small exception](#a-small-exception)
+    * [Main function](#main-function)
+    * [Test application final result](#test-application-final-result)
+* [Experimentation](#experimentation)
+  * [GitHub repository](#github-repository)
+  * [Compilation](#compilation)
+  * [Execution](#execution)
+* [Conclusion](#conclusion)
+  * [Summary](#summary)
+  * [Limitations](#limitations)
+  * [Future work](#future-work)
 
----
+***
 
 # Motivations
 
-First of all, *pardon my French*, I am a French native speaker with a fairly solid background in English, and some of my sentences may seem flawed. 
+First of all, _pardon my French_, I am a French native speaker with a fairly solid background in English, and some of my sentences may seem flawed.
 
 For a few years now, I've been thinking about maintaining a blog on programming.
 I am now a reasonably experienced engineer, I have worked on stimulating projects at Thales and Airbus in France, and I want to share some visions I have on my field.
@@ -74,11 +79,12 @@ Furthermore, some C++ blogs are way more interesting than mine. I prepared a sma
 Anyway, I think it's time for me to stop hiding behind the excuse that someone somewhere must have already done better not to publish.
 If by any chance you are interested in my vision, and you identify gaps in my proposals, I would be particularly glad to discuss this in the comments.
 
----
+***
 
 # Context
 
 One of the questions in my test was, from memory:
+
 > Implement a Logger, based on the singleton.
 >
 > The Logger should have a print method taking as input a log level (INFO, WARN, ERROR), and a message.
@@ -90,12 +96,13 @@ I implemented a distributed simulation framework in C++11, in which I made exten
 
 By the greatest coincidence, I had made in this framework a similar Logger class to trace the execution of simulation components.
 The significant differences being that :
+
 * Using a simulation framework distributed between my components, I did not need to make sure my implementation was thread-safe.
 * The singleton part was at the simulation components level.
 
 I rewrote a singleton in much the same way as I did in my framework, making sure to make it thread-safe.
 
----
+***
 
 # Related work
 
@@ -103,19 +110,19 @@ Here is a non-exhaustive list of resources among my favorite blogs and sites, as
 
 All these resources are much more professional and educational than my work, and I highly recommend them if you want to go further.
 
-&nbsp;
+ 
 
 ## Blogs and websites
 
 * [C++ Programming: Code patterns design](https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Design_Patterns)
-* [Fluent\{C\+\+\}](https://www.fluentcpp.com/)
+* [Fluent{C++}](https://www.fluentcpp.com/)
 * [Andrzej's C++ blog](https://akrzemi1.wordpress.com/)
 * [The view from aristeia](http://scottmeyers.blogspot.com/)
 * [ISO C++ blog](https://isocpp.org/blog)
 * [C++ Core guidelines](https://github.com/isocpp/CppCoreGuidelines)
-* ... And much more, just google 
+* ... And much more, just google
 
-&nbsp;
+ 
 
 ## Books
 
@@ -127,7 +134,7 @@ All these resources are much more professional and educational than my work, and
 * [C++ Concurrency in Action](https://www.manning.com/books/c-plus-plus-concurrency-in-action)
 * ... And much more than I have not yet had the opportunity to read ...
 
----
+***
 
 # Introduction
 
@@ -138,13 +145,14 @@ In software engineering, [design patterns](https://en.wikipedia.org/wiki/Softwar
 There exist abounding design patterns, and most of the time, we think first and foremost of the [GoF design patterns](http://wiki.c2.com/?GangOfFour).
 
 Design patterns can be split into different categories, in simple words:
+
 * Creational patterns - these are the design patterns that deal with the creation of objects, which requires particular control.
 * Structural patterns - these are the design patterns that deal with the relationships between software entities.
 * Behavioral patterns - these are the design patterns that deal with the communication and behavior of objects.
 
 But we can still hear about concurrency patterns or even anti-patterns.
 
-&nbsp;
+ 
 
 ## The singleton pattern
 
@@ -164,7 +172,6 @@ Unfortunately, the singleton is also very often misused, and many articles can b
 It is not for me to say if the singleton is a good or bad design pattern.
 I focus here on my vision of its implementation.
 
-
 ### How to implement a singleton
 
 The object should only exist in one instance, so the constructor of its class is inaccessible, and an interface is provided.
@@ -174,14 +181,12 @@ The following class diagram illustrates this mechanism:
 
 <!-- ![singleton class diagram](/static/assets/img/blog/cpp/singleton_example/singleton.png "Singleton class diagram") -->
 
-<p align="center">
-  <img src="/static/assets/img/blog/cpp/singleton_example/singleton.png">
-</p>
+<p align="center"> <img src="/static/uploads/cpp_singleton.png"> </p>
 
 In this diagram, the instance is a Singleton object belonging to the Singleton class.
 The `get_instance` class method allows to build this instance on the first call, via the private constructor, and to return this same singleton every call.
 
----
+***
 
 # The Logger class
 
@@ -192,7 +197,7 @@ We will first focus on the elements essential to any class, constructors and des
 <!-- ![Logger class diagram](/static/assets/img/blog/cpp/singleton_example/logger.png "Logger class diagram") -->
 
 <p align="center">
-  <img src="/static/assets/img/blog/cpp/singleton_example/logger.png">
+<img src="/static/uploads/cpp_logger.png">
 </p>
 
 The Logger should be a singleton; its class diagram strongly resembles the singleton ones, and the pattern of the singleton can be figured behind it.
@@ -200,7 +205,7 @@ We add a print method as requested, which takes a log level and a message and di
 We also add the possibility to configure the output of this print via a private class attribute, `output_`, which can be modified by a class method, as well as a mutex to protect the critical section that is `output_` access.
 Let's now look at its implementation.
 
-&nbsp;
+ 
 
 ## The Logger class declaration
 
@@ -244,7 +249,7 @@ The first one explicitly generates a default function, will the second delete a 
 In the previous snippet, the constructor, declared by default, is hidden in the private part of the class.
 The compiler should have generated a default constructor implicitly, as there is no other constructor in this class, but this one would have been publicly accessible.
 
-The destructor is free to access. 
+The destructor is free to access.
 It's a design choice.
 Making it private would have prevented a user from deleting the instance that everyone uses, but some compilers don't know how to handle private destructor.
 In this specific case, I trust users more than compilers.
@@ -252,7 +257,6 @@ In this specific case, I trust users more than compilers.
 One could also have not make the destructor explicit, the compiler would have generated one, but from my point of view, it is cleaner to express all constructors and destructors in a class whose creation and destruction mechanisms are essential, and this is the case of the singleton which is a creational pattern.
 
 Finally, it is useless to declare the `virtual` destructor since we have defined our `final` class, and none can inherit it.
-
 
 ### Copy constructor and assignment
 
@@ -272,7 +276,7 @@ By default, the compiler will generate [copy constructor](https://en.cppreferenc
 
 In an earlier version of C++, one would have put these constructors and assignments in the `private` part of the class, as we did to the constructor, but C++11 allows a cleaner method to prevent the use of copy.
 
-The `delete' specifier that we have seen in the previous sub-section allows us to remove these functions explicitly.
+The \`delete' specifier that we have seen in the previous sub-section allows us to remove these functions explicitly.
 They are therefore not only inaccessible, they no longer exist, even for the singleton.
 
 ### Move constructor and assignment
@@ -301,7 +305,7 @@ By adding the `noexcept` specifier, move constructor and assignment are explicit
 
 No specifying `noexecpt` is not a problem in our design since STL libraries containers choose copy constructors and assignments instead of move ones, unless they are marked `noexcept` or the copy constructor is not accessible, which is our case.
 
-&nbsp;
+ 
 
 ## Singleton functionality
 
@@ -346,7 +350,7 @@ The initialized object that would have been a temporary object copied can now be
 From the compiler's point of view `static auto &&logger = Logger();` will be translated into `static Logger &&logger = Logger();`.
 I remain satisfied with the disappearance of the bureaucratic aspect of rewriting the class name several times to declare it, then initialize it with its constructor.
 
-__Note:__
+**Note:**
 
 It would also have been possible to call the private constructor directly:
 
@@ -355,7 +359,7 @@ It would also have been possible to call the private constructor directly:
 ```
 
 From my point of view, this is a bad practice.
-I want a consistent language. 
+I want a consistent language.
 I like that all my variable declaration are:
 
 ```cpp
@@ -366,8 +370,7 @@ Language is consistent, it makes it impossible for objects to be uninitialized, 
 
 I recommend you this [great article](https://herbsutter.com/2013/08/12/gotw-94-solution-aaa-style-almost-always-auto/) from Herb Sutter.
 
-
-&nbsp;
+ 
 
 ## Logger functionality
 
@@ -400,6 +403,7 @@ There's nothing particular here.
 ```
 
 This method is implemented as follow:
+
 ```cpp
 void Logger::print(Logger::level level, const std::string &message) {
   // Initializing a string stream.
@@ -433,18 +437,21 @@ In the simulation framework I designed, I also added a possible output in a file
 I then wanted to add a class setting for the print output.
 
 I declared the `p_output` pointer on [std::ostream class](https://en.cppreference.com/w/cpp/io/basic_ostream) as private and static in the class:
+
 ```cpp
  private:
   static std::ostream *p_output_;
 ```
 
 Initialized to `nullptr` in the implementation:
+
 ```cpp
 // Initialization of the display pointer.
 std::ostream *Logger::p_output_ = nullptr;
 ```
 
 And add a public class method to change the output:
+
 ```cpp
  public:
   // A function that allows the setting of the logger output.
@@ -522,9 +529,9 @@ void Logger::print(Logger::level level, const std::string &message) {
 
 You can find on GitHub the final result of the Logger class [header](https://github.com/hnrck/singleton_example/blob/master/include/Logger.h) and [implementation](https://github.com/hnrck/singleton_example/blob/master/srcs/Logger.cpp).
 
-&nbsp;
+ 
 
-## Test application 
+## Test application
 
 A small program repeatedly calling the print method of the logger instance concurrently is built to test our singleton Logger.
 
@@ -649,7 +656,7 @@ Finally, if everything went well, we can leave the execution of the program.
 
 The final result of the test application is available on [GitHub](https://github.com/hnrck/singleton_example/blob/master/app/main.cpp)
 
----
+***
 
 # Experimentation
 
@@ -658,17 +665,16 @@ The final result of the test application is available on [GitHub](https://github
 The code source of the full example available is on [hnrck/singleton_example](https://github.com/hnrck/singleton_example).
 
 The GitHub repository is structured as following:
-```
-.
-├── app
-│   └── main.cpp
-├── CMakeLists.txt
-├── include
-│   └── Logger.h
-├── LICENSE
-└── srcs
-    └── Logger.cpp
-```
+
+    .
+    ├── app
+    │   └── main.cpp
+    ├── CMakeLists.txt
+    ├── include
+    │   └── Logger.h
+    ├── LICENSE
+    └── srcs
+        └── Logger.cpp
 
 * app - containing the application [`main.cpp`](https://github.com/hnrck/singleton_example/blob/master/app/main.cpp), using the Logger class.
 * [`CMakeLists.txt`](https://github.com/hnrck/singleton_example/blob/master/CMakeLists.txt) - allowing to build the project quickly.
@@ -677,11 +683,10 @@ The GitHub repository is structured as following:
 * srcs - containing the [Logger implementation](https://github.com/hnrck/singleton_example/blob/master/srcs/Logger.cpp).
 
 To test the project, the easiest way is to clone the github repository:
-```
-git clone https://github.com/hnrck/singleton_example.git
-```
 
-&nbsp;
+    git clone https://github.com/hnrck/singleton_example.git
+
+ 
 
 ## Compilation
 
@@ -695,7 +700,7 @@ cmake --build .
 
 These commands build the logger library `liblogger.so.1.0.0` in `singleton_example/build/usr/lib/` and an executable `main` in `singleton_example/build/usr/bin/`.
 
-*Alternative*
+_Alternative_
 
 As a huge big fan of clang and ninja, I use the following commands.
 In the future, I will try to make an article to explain my tool preferences.
@@ -708,7 +713,7 @@ cmake -G "Ninja" -DCMAKE_CXX_COMPILER=clang++ ..
 cmake --build . 
 ```
 
-&nbsp;
+ 
 
 ## Execution
 
@@ -721,13 +726,13 @@ usr/bin/main <number of thread> 2> <log file>
 Where `<number of thread>` is a number from 0 to 1000. Trying to enter incorrect values causes errors, but that is not the point of this article
 And `<log file>` is the file where the log will be written
 
-*Note:*
+_Note:_
 
 ```bash 
 usr/bin/main <number of thread>
 ```
 
-*Will output the logs in the terminal.*
+_Will output the logs in the terminal._
 
 For instance:
 
@@ -737,39 +742,35 @@ usr/bin/main 10 2> log.txt
 
 returns on the terminal:
 
-```
-Logger singleton example.
-Take a number of thread from first argument (from 0 to 1000), and execute concurrently simple routines.
-Setting the logger output to std::cerr, so the log can be extracted and saved in a file.
-Creating  and joining 10 threads.
-All the threads finished their routines.
-Done with success.
-```
+    Logger singleton example.
+    Take a number of thread from first argument (from 0 to 1000), and execute concurrently simple routines.
+    Setting the logger output to std::cerr, so the log can be extracted and saved in a file.
+    Creating  and joining 10 threads.
+    All the threads finished their routines.
+    Done with success.
 
 and `log.txt` contains:
 
-```
-WARN: this is the message n° 1.
-INFO: this is the message n° 0.
-ERROR: this is the message n° 2.
-INFO: this is the message n° 3.
-WARN: this is the message n° 4.
-ERROR: this is the message n° 5.
-INFO: this is the message n° 6.
-WARN: this is the message n° 7.
-ERROR: this is the message n° 8.
-INFO: this is the message n° 9.
-```
+    WARN: this is the message n° 1.
+    INFO: this is the message n° 0.
+    ERROR: this is the message n° 2.
+    INFO: this is the message n° 3.
+    WARN: this is the message n° 4.
+    ERROR: this is the message n° 5.
+    INFO: this is the message n° 6.
+    WARN: this is the message n° 7.
+    ERROR: this is the message n° 8.
+    INFO: this is the message n° 9.
 
 Video of the demo on [asciinema](https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm):
 
 [![asciicast](https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm.svg)](https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm)
 <!-- ![demo](/static/assets/img/blog/cpp/singleton_example/demo.gif "demo") -->
 <!-- <p align="center"> -->
-<!--   <img src="/static/assets/img/blog/cpp/singleton_example/demo.gif" height="1000" width="968"> -->
+<!--   <img src="/static/uploads/cpp_demo.gif" height="1000" width="968"> -->
 <!-- </p> -->
 
----
+***
 
 # Conclusion
 
@@ -783,7 +784,7 @@ In this article, we presented one of the most simple design patterns, the single
 C++ does not have direct support for these design patterns, and recent modernizations do not provide this support.
 Nevertheless, modern C++ best practices allow an explicit and beautiful implementation of the singleton design pattern.
 
-&nbsp;
+ 
 
 ## Limitations
 
@@ -791,10 +792,10 @@ First of all, the singleton I decided to illustrate in this article is often con
 
 Then, the Logger class and main application I built are very simplistic examples. The Internet is full of examples of more interesting applications.
 
-&nbsp;
+ 
 
 ## Future work
 
 In any order, I would like to write articles about other design patterns implementation, write articles about the C++ tools I used, and write articles about my C++ preferred resources.
 
----
+***
