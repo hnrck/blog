@@ -18,11 +18,47 @@
   </url>
   
   <url>
-    <loc>https://hnrck.io/blog/categories/</loc>
+    <loc>https://hnrck.io/blog/tags/c&#43;&#43;/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/tags/c&#43;&#43;11/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/tags/design-pattern/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/tags/github/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/posts/2018-11-05-1-modern-cpp-singleton/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/posts/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/tags/singleton/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>https://hnrck.io/blog/tags/</loc>
+    <lastmod>2018-11-05T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>https://hnrck.io/blog/categories/</loc>
   </url>
   
 </urlset>

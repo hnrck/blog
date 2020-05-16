@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html><head>
+	<meta charset="utf-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Modern C&#43;&#43; singleton implementation through an example - Henrick Deschamps</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Modern C&#43;&#43; singleton implementation through an example" />
+<meta property="og:description" content="This post illustrate the design and implementation of the singleton design pattern with modern C&#43;&#43;." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://hnrck.io/blog/posts/2018-11-05-1-modern-cpp-singleton/" />
+<meta property="article:published_time" content="2018-11-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2018-11-05T00:00:00+00:00" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Modern C&#43;&#43; singleton implementation through an example"/>
+<meta name="twitter:description" content="This post illustrate the design and implementation of the singleton design pattern with modern C&#43;&#43;."/>
+<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+	<link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css?family=Roboto+Mono" rel="stylesheet">
+	<link rel="stylesheet" type="text/css" media="screen" href="https://hnrck.io/blog/css/main.css" /><link rel="stylesheet" type="text/css" href="https://hnrck.io/blog/css/dark.css" media="(prefers-color-scheme: dark)" />
+</head><body>
+        <div class="content"><header>
+	<div class="main">
+		<a href="https://hnrck.io/blog/">Henrick Deschamps</a>
+	</div>
+	<nav>
+		
+		<a href="/blog/">Home</a>
+		
+		<a href="/blog/posts">All posts</a>
+		
+		<a href="/blog/about">About</a>
+		
+		<a href="/blog/tags">Tags</a>
+		
+	</nav>
+</header>
+
+<main>
+	<article>
+		<div class="title">
+			<h1 class="title">Modern C&#43;&#43; singleton implementation through an example</h1>
+			<div class="meta">Posted on Nov 5, 2018</div>
+		</div>
+		
+
+		<section class="body">
+			<p><strong>[tl;dr]</strong> Modern C++ best practices allows an explicit and beautiful implementation of the singleton design pattern.</p>
+<hr>
+<p>Code source of the full example available on <a href="https://github.com/hnrck/singleton_example">hnrck/singleton_example</a>.</p>
+<hr>
+<h1 id="table-of-contents">Table of Contents</h1>
+<ul>
+<li><a href="#motivations">Motivations</a></li>
+<li><a href="#context">Context</a></li>
+<li><a href="#related-work">Related work</a>
+<ul>
+<li><a href="#blogs-and-websites">Blogs and websites</a></li>
+<li><a href="#books">Books</a></li>
+</ul>
+</li>
+<li><a href="#introduction">Introduction</a>
+<ul>
+<li><a href="#about-design-patterns">About design patterns</a></li>
+<li><a href="#the-singleton-pattern">The singleton pattern</a>
+<ul>
+<li><a href="#why-using-a-singleton">Why using a singleton</a></li>
+<li><a href="#how-to-implement-a-singleton">How to implement a singleton</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#the-logger-class">The Logger class</a>
+<ul>
+<li><a href="#the-logger-class-declaration">The Logger class declaration</a>
+<ul>
+<li><a href="#constructor-and-assignment">Constructor and assignment</a></li>
+<li><a href="#copy-constructor-and-assignment">Copy constructor and assignment</a></li>
+<li><a href="#move-constructor-and-assignment">Move constructor and assignment</a></li>
+</ul>
+</li>
+<li><a href="#singleton-functionality">Singleton functionality</a></li>
+<li><a href="#logger-functionality">Logger functionality</a>
+<ul>
+<li><a href="#log-level">Log level</a></li>
+<li><a href="#print-method">Print method</a></li>
+<li><a href="#output-setting">Output setting</a></li>
+<li><a href="#output-protection">Output protection</a></li>
+<li><a href="#logger-class-final-result">Logger class final result</a></li>
+</ul>
+</li>
+<li><a href="#test-application">Test application</a>
+<ul>
+<li><a href="#global-parameters">Global parameters</a></li>
+<li><a href="#test-routine">Test routine</a></li>
+<li><a href="#a-small-exception">A small exception</a></li>
+<li><a href="#main-function">Main function</a></li>
+<li><a href="#test-application-final-result">Test application final result</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><a href="#experimentation">Experimentation</a>
+<ul>
+<li><a href="#github-repository">GitHub repository</a></li>
+<li><a href="#compilation">Compilation</a></li>
+<li><a href="#execution">Execution</a></li>
+</ul>
+</li>
+<li><a href="#conclusion">Conclusion</a>
+<ul>
+<li><a href="#summary">Summary</a></li>
+<li><a href="#limitations">Limitations</a></li>
+<li><a href="#future-work">Future work</a></li>
+</ul>
+</li>
+</ul>
+<hr>
+<h1 id="motivations">Motivations</h1>
+<p>First of all, <em>pardon my French</em>, I am a French native speaker with a fairly solid background in English, and some of my sentences may seem flawed.</p>
+<p>For a few years now, I&rsquo;ve been thinking about maintaining a blog on programming.
+I am now a reasonably experienced engineer, I have worked on stimulating projects at Thales and Airbus in France, and I want to share some visions I have on my field.</p>
+<p>Nowadays I am finishing my Ph.D. thesis, and I have started my job search process.
+Latterly, I participated in a test, during which I had a few tens of minutes to answer questions about implementation in modern C++.
+From my point of view, I had no difficulty answering the questions, and to be honest, I even had much fun.
+Nevertheless, once the test was over, I took my books on the C++ language to check my answers, and I noticed that most of them were rather old-school on their recommendation for design patterns implementation.</p>
+<p>I, therefore, take this opportunity to express my point of view on modern design in C++.</p>
+<p>My contribution on this blog is particularly minimal, and I&rsquo;m sure that some books I don&rsquo;t have yet offer even better implementation methods than mine.
+Furthermore, some C++ blogs are way more interesting than mine. I prepared a small related work section in this article.
+Anyway, I think it&rsquo;s time for me to stop hiding behind the excuse that someone somewhere must have already done better not to publish.
+If by any chance you are interested in my vision, and you identify gaps in my proposals, I would be particularly glad to discuss this in the comments.</p>
+<hr>
+<h1 id="context">Context</h1>
+<p>One of the questions in my test was, from memory:</p>
+<blockquote>
+<p>Implement a Logger, based on the singleton.</p>
+<p>The Logger should have a print method taking as input a log level (INFO, WARN, ERROR), and a message.</p>
+<p>The use of C++11 and a thread-safe implementation will be appreciated.</p>
+</blockquote>
+<p>This question was particularly inspiring to me.
+I implemented a distributed simulation framework in C++11, in which I made extensive use of design patterns.</p>
+<p>By the greatest coincidence, I had made in this framework a similar Logger class to trace the execution of simulation components.
+The significant differences being that :</p>
+<ul>
+<li>Using a simulation framework distributed between my components, I did not need to make sure my implementation was thread-safe.</li>
+<li>The singleton part was at the simulation components level.</li>
+</ul>
+<p>I rewrote a singleton in much the same way as I did in my framework, making sure to make it thread-safe.</p>
+<hr>
+<h1 id="related-work">Related work</h1>
+<p>Here is a non-exhaustive list of resources among my favorite blogs and sites, as well as some books I have read, which I find appropriate for this article.</p>
+<p>All these resources are much more professional and educational than my work, and I highly recommend them if you want to go further.</p>
+<p> </p>
+<h2 id="blogs-and-websites">Blogs and websites</h2>
+<ul>
+<li><a href="https://en.wikibooks.org/wiki/C%2B%2B_Programming/Code/Design_Patterns">C++ Programming: Code patterns design</a></li>
+<li><a href="https://www.fluentcpp.com/">Fluent{C++}</a></li>
+<li><a href="https://akrzemi1.wordpress.com/">Andrzej&rsquo;s C++ blog</a></li>
+<li><a href="http://scottmeyers.blogspot.com/">The view from aristeia</a></li>
+<li><a href="https://isocpp.org/blog">ISO C++ blog</a></li>
+<li><a href="https://github.com/isocpp/CppCoreGuidelines">C++ Core guidelines</a></li>
+<li>&hellip; And much more, just google</li>
+</ul>
+<p> </p>
+<h2 id="books">Books</h2>
+<ul>
+<li><a href="http://www.stroustrup.com/4th.html">The C++ Programming Language</a></li>
+<li><a href="https://www.oreilly.com/library/view/design-patterns-elements/0201633612/">Design Patterns: Elements of Reusable Object-Oriented Software</a></li>
+<li><a href="https://www.editions-eyrolles.com/Livre/9782212673869/programmer-en-langage-c">Programmer en langage C++</a></li>
+<li><a href="https://www.oreilly.com/library/view/effective-modern-c/9781491908419/">Effective Modern C++</a></li>
+<li><a href="https://www.oreilly.com/library/view/safe-c/9781449321338/">Safe C++</a></li>
+<li><a href="https://www.manning.com/books/c-plus-plus-concurrency-in-action">C++ Concurrency in Action</a></li>
+<li>&hellip; And much more than I have not yet had the opportunity to read &hellip;</li>
+</ul>
+<hr>
+<h1 id="introduction">Introduction</h1>
+<h2 id="about-design-patterns">About design patterns</h2>
+<p>In software engineering, <a href="https://en.wikipedia.org/wiki/Software_design_pattern">design patterns</a> are software bricks, recognized as good practice, and addressing common design issues.</p>
+<p>There exist abounding design patterns, and most of the time, we think first and foremost of the <a href="http://wiki.c2.com/?GangOfFour">GoF design patterns</a>.</p>
+<p>Design patterns can be split into different categories, in simple words:</p>
+<ul>
+<li>Creational patterns - these are the design patterns that deal with the creation of objects, which requires particular control.</li>
+<li>Structural patterns - these are the design patterns that deal with the relationships between software entities.</li>
+<li>Behavioral patterns - these are the design patterns that deal with the communication and behavior of objects.</li>
+</ul>
+<p>But we can still hear about concurrency patterns or even anti-patterns.</p>
+<p> </p>
+<h2 id="the-singleton-pattern">The singleton pattern</h2>
+<p>The <a href="https://en.wikipedia.org/wiki/Singleton_pattern">singleton</a> is a member of the creational patterns.</p>
+<p>This is one of the most straightforward patterns, and it aims to ensure that there is only one instance of a given class.</p>
+<h3 id="why-using-a-singleton">Why using a singleton</h3>
+<p>The singleton is used when you need to have the same object to perform specific actions.
+The singleton is also very often used in the implementation of other design patterns.</p>
+<p>Besides, the singleton makes it possible to maintain a global state without going through a global variable and saves time and allocation space.</p>
+<p>Unfortunately, the singleton is also very often misused, and many articles can be found on the Internet presenting arguments against the singleton.</p>
+<p>It is not for me to say if the singleton is a good or bad design pattern.
+I focus here on my vision of its implementation.</p>
+<h3 id="how-to-implement-a-singleton">How to implement a singleton</h3>
+<p>The object should only exist in one instance, so the constructor of its class is inaccessible, and an interface is provided.
+The interface  builds the object on the first call, and always returns the same instance to those who call it.</p>
+<p>The following class diagram illustrates this mechanism:</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>In this diagram, the instance is a Singleton object belonging to the Singleton class.
+The <code>get_instance</code> class method allows to build this instance on the first call, via the private constructor, and to return this same singleton every call.</p>
+<hr>
+<h1 id="the-logger-class">The Logger class</h1>
+<p>Let&rsquo;s get to the crux of the matter, the implementation of an example of a singleton.</p>
+<p>We will first focus on the elements essential to any class, constructors and destructors, then deal with the addition of the instance and the get_instance method, and finally add the functionalities of the Logger.</p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<p>The Logger should be a singleton; its class diagram strongly resembles the singleton ones, and the pattern of the singleton can be figured behind it.
+We add a print method as requested, which takes a log level and a message and displays them.
+We also add the possibility to configure the output of this print via a private class attribute, <code>output_</code>, which can be modified by a class method, as well as a mutex to protect the critical section that is <code>output_</code> access.
+Let&rsquo;s now look at its implementation.</p>
+<p> </p>
+<h2 id="the-logger-class-declaration">The Logger class declaration</h2>
+<p>The first step in creating a class in C++, its declaration.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Logger</span> <span style="color:#66d9ef">final</span> {
+};
+</code></pre></div><p>Since C++11, the specifier <a href="https://en.cppreference.com/w/cpp/language/final"><code>final</code></a> can be added to classes.</p>
+<p>This specifier will be useful at the design level.
+It explicitly prohibits inheritance from the specified class.</p>
+<p>This deletion of the inheritance is entirely relative, an evil developer wishing to inherit from this class will be able to delete the <code>final</code> and do what he wants, nevertheless, it allows to make explicit the desire of the initial developer.
+It might be tricky to adapt our singleton into an inherited class, and it is easier to redesign if necessary, for instance by using a singleton adapter.
+A developer wanting to manipulate this part of the code will see that the original developer has not planned to allow the inheritance of his class, without having to integrate this into comments, and a less experienced developer will be protected at compilation time.</p>
+<h3 id="constructor-and-assignment">Constructor and assignment</h3>
+<p>The necessary elements of a C++ class are <a href="https://en.cppreference.com/w/cpp/language/initializer_list">constructors</a> and <a href="https://en.cppreference.com/w/cpp/language/destructor">destructors</a>.
+By default these are generated by the compiler, and public.</p>
+<p>Here we have subtleties that make us want the explicit declarations: we want to hide the constructor.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span> <span style="color:#75715e">// Private default constructor.
+</span><span style="color:#75715e"></span>  Logger() <span style="color:#f92672">=</span> <span style="color:#66d9ef">default</span>;
+
+ <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+
+  <span style="color:#75715e">// Default logger destructor. No need for virtual destructor as the logger
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// class cannot be inherited.
+</span><span style="color:#75715e"></span>  <span style="color:#f92672">~</span>Logger() <span style="color:#f92672">=</span> <span style="color:#66d9ef">default</span>;
+</code></pre></div><p>C++11 introduces new mechanisms for declaring constructors and destructors, the <a href="http://www.stroustrup.com/C++11FAQ.html#default"><code>= default</code> and <code>= delete</code> specifiers</a>.
+The first one explicitly generates a default function, will the second delete a function.</p>
+<p>In the previous snippet, the constructor, declared by default, is hidden in the private part of the class.
+The compiler should have generated a default constructor implicitly, as there is no other constructor in this class, but this one would have been publicly accessible.</p>
+<p>The destructor is free to access.
+It&rsquo;s a design choice.
+Making it private would have prevented a user from deleting the instance that everyone uses, but some compilers don&rsquo;t know how to handle private destructor.
+In this specific case, I trust users more than compilers.</p>
+<p>One could also have not make the destructor explicit, the compiler would have generated one, but from my point of view, it is cleaner to express all constructors and destructors in a class whose creation and destruction mechanisms are essential, and this is the case of the singleton which is a creational pattern.</p>
+<p>Finally, it is useless to declare the <code>virtual</code> destructor since we have defined our <code>final</code> class, and none can inherit it.</p>
+<h3 id="copy-constructor-and-assignment">Copy constructor and assignment</h3>
+<p>Singletons must not be copyable, and only the <code>get_instance</code> interface must allow access to the instance.
+By default, the compiler will generate <a href="https://en.cppreference.com/w/cpp/language/copy_constructor">copy constructor</a> and <a href="https://en.cppreference.com/w/cpp/language/copy_assignment">copy assignment</a>, so we have to handle their declaration.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// Deleted copy constructor.
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// Only the get_instance class method is allowed to give a logger.
+</span><span style="color:#75715e"></span>  Logger(<span style="color:#66d9ef">const</span> Logger <span style="color:#f92672">&amp;</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">delete</span>;
+
+  <span style="color:#75715e">// Deleted copy assignment.
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// Only the get_instance class method is allowed to give a logger.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">void</span> <span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(<span style="color:#66d9ef">const</span> Logger <span style="color:#f92672">&amp;</span>) <span style="color:#f92672">=</span> <span style="color:#66d9ef">delete</span>;
+</code></pre></div><p>In an earlier version of C++, one would have put these constructors and assignments in the <code>private</code> part of the class, as we did to the constructor, but C++11 allows a cleaner method to prevent the use of copy.</p>
+<p>The `delete&rsquo; specifier that we have seen in the previous sub-section allows us to remove these functions explicitly.
+They are therefore not only inaccessible, they no longer exist, even for the singleton.</p>
+<h3 id="move-constructor-and-assignment">Move constructor and assignment</h3>
+<p>This part is not mandatory, but as I wrote above, the singleton is a creational pattern, and all its construction, destruction and assignment mechanisms should be made explicit.
+We will also make the <a href="https://en.cppreference.com/w/cpp/language/move_constructor">move constructors</a> and <a href="https://en.cppreference.com/w/cpp/language/move_assignment">assignments</a> explicit.</p>
+<p>There is no need to delete the latter.
+Once an instance has been provided to a client, the client can do whatever he wants with it, including transferring the instance.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// Default move constructor.
+</span><span style="color:#75715e"></span>  Logger(Logger <span style="color:#f92672">&amp;&amp;</span>) <span style="color:#66d9ef">noexcept</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">default</span>;
+
+  <span style="color:#75715e">// Default move assignment.
+</span><span style="color:#75715e"></span>  Logger <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">operator</span><span style="color:#f92672">=</span>(Logger <span style="color:#f92672">&amp;&amp;</span>) <span style="color:#66d9ef">noexcept</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">default</span>;
+</code></pre></div><p>Just as we did for the destructor, these are <code>public</code> and <code>default</code>.
+Only one subtlety, the presence of the <a href="https://en.cppreference.com/w/cpp/language/noexcept_spec"><code>noexcept</code> specifier</a>.</p>
+<p>Since C++11, a function can be specified whether it could throw exceptions or not.
+Defaulted functions can potentially throw an exception.
+By adding the <code>noexcept</code> specifier, move constructor and assignment are explicitly non-throwing.</p>
+<p>No specifying <code>noexecpt</code> is not a problem in our design since STL libraries containers choose copy constructors and assignments instead of move ones, unless they are marked <code>noexcept</code> or the copy constructor is not accessible, which is our case.</p>
+<p> </p>
+<h2 id="singleton-functionality">Singleton functionality</h2>
+<p>The two crucial elements of implementing a singleton are its instance and its interface.</p>
+<p>For the interface, we implement a class method that will initialize the instance at the first call, and return this instance at each call.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// Initialize the Logger singleton once, and return it each time this class
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// method is called.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">static</span> Logger <span style="color:#f92672">&amp;</span>get_instance();
+</code></pre></div><p><a href="https://en.cppreference.com/w/cpp/language/static"><code>static</code> is the keyword</a> used in C++ to declare a class method, and the return type is <code>Logger &amp;</code>, a reference to the instance.</p>
+<p>At the level of the instance implementation, C++ allows to hide it apart from its attributes.
+The instance can be linked to the class method <code>get_instance</code>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">Logger <span style="color:#f92672">&amp;</span>Logger<span style="color:#f92672">::</span>get_instance() {
+  <span style="color:#75715e">// The logger variable is initialized once with a move assignment of a logger
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// object build with the private constructor.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;&amp;</span>logger <span style="color:#f92672">=</span> Logger();
+  <span style="color:#66d9ef">return</span> (logger);
+}
+</code></pre></div><p>Variables declared with the <a href="https://en.cppreference.com/w/cpp/language/storage_duration#Static_local_variables"><code>static</code> specifier</a> have static storage duration.
+They are initialized the first time the execution goes through the declaration.</p>
+<p><a href="https://en.cppreference.com/w/cpp/language/auto"><code>auto</code> is a variable specifier</a> which means that the type of the variable will be deduced from its initializer.</p>
+<p>The <a href="https://en.cppreference.com/w/cpp/language/reference"><code>&amp;&amp;</code> token</a> is used to mean an rvalue reference.
+An rvalue reference behaves like an lvalue reference, but can be bind to a temporary rvalue.
+The initialized object that would have been a temporary object copied can now be moved in our variable.</p>
+<p><code>Logger()</code> is the Logger class private constructor, creating the logger object.</p>
+<p><code>static auto &amp;&amp;logger = Logger();</code> means that the first time the declaration is executed, a logger object will be created by the private constructor, and moved into the logger variable, which is deducted to be a logger object.</p>
+<p>From the compiler&rsquo;s point of view <code>static auto &amp;&amp;logger = Logger();</code> will be translated into <code>static Logger &amp;&amp;logger = Logger();</code>.
+I remain satisfied with the disappearance of the bureaucratic aspect of rewriting the class name several times to declare it, then initialize it with its constructor.</p>
+<p><strong>Note:</strong></p>
+<p>It would also have been possible to call the private constructor directly:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">  <span style="color:#66d9ef">static</span> Logger logger;
+</code></pre></div><p>From my point of view, this is a bad practice.
+I want a consistent language.
+I like that all my variable declaration are:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">[<span style="color:#66d9ef">static</span>] [<span style="color:#66d9ef">const</span>] <span style="color:#66d9ef">auto</span> [<span style="color:#f92672">&amp;</span>[<span style="color:#f92672">&amp;</span>]] <span style="color:#f92672">&lt;</span>name<span style="color:#f92672">&gt;</span> <span style="color:#f92672">=</span> <span style="color:#f92672">&lt;</span>initializer<span style="color:#f92672">&gt;</span>;
+</code></pre></div><p>Language is consistent, it makes it impossible for objects to be uninitialized, and this is way more stylish.</p>
+<p>I recommend you this <a href="https://herbsutter.com/2013/08/12/gotw-94-solution-aaa-style-almost-always-auto/">great article</a> from Herb Sutter.</p>
+<p> </p>
+<h2 id="logger-functionality">Logger functionality</h2>
+<h3 id="log-level">Log level</h3>
+<p>C++ inherits from C a straightforward mechanism for a set of constants declaration.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// The different logger levels.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">level</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">char</span> {
+    INFO,
+    WARN,
+    ERROR,
+  };
+};
+</code></pre></div><p>Three unsigned char constants are declared, with respectively 0, 1 and 2 as value.</p>
+<h3 id="print-method">Print method</h3>
+<p>The print method will take one of the enum level constants as entered, as well as a message.
+There&rsquo;s nothing particular here.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// Print a message with a certain logger level on the output.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">void</span> print(<span style="color:#66d9ef">enum</span> <span style="color:#a6e22e">level</span> level, <span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string <span style="color:#f92672">&amp;</span>message);
+</code></pre></div><p>This method is implemented as follow:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> Logger<span style="color:#f92672">::</span>print(Logger<span style="color:#f92672">::</span>level level, <span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string <span style="color:#f92672">&amp;</span>message) {
+  <span style="color:#75715e">// Initializing a string stream.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> ss <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>stringstream();
+
+  <span style="color:#75715e">// Buffering the log level in the string stream.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">switch</span> (level) {
+    <span style="color:#66d9ef">case</span> (INFO)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;INFO&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+    <span style="color:#66d9ef">case</span> (WARN)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;WARN&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+    <span style="color:#66d9ef">case</span> (ERROR)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;ERROR&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+  }
+  <span style="color:#75715e">// Buffering the message in the string stream.
+</span><span style="color:#75715e"></span>  ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> message;
+
+  <span style="color:#66d9ef">if</span> (p_output_ <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nullptr</span>) {
+    <span style="color:#75715e">// If the output is set, then display the string stream.
+</span><span style="color:#75715e"></span>    (<span style="color:#f92672">*</span>p_output_) <span style="color:#f92672">&lt;&lt;</span> ss.rdbuf() <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+  }
+
+  <span style="color:#75715e">// In a real application, log might also be saved in file.
+</span><span style="color:#75715e"></span>}
+</code></pre></div><p>In the simulation framework I designed, I also added a possible output in a file, but I won&rsquo;t complicate the problem here much more.</p>
+<h3 id="output-setting">Output setting</h3>
+<p>I then wanted to add a class setting for the print output.</p>
+<p>I declared the <code>p_output</code> pointer on <a href="https://en.cppreference.com/w/cpp/io/basic_ostream">std::ostream class</a> as private and static in the class:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+  <span style="color:#66d9ef">static</span> std<span style="color:#f92672">::</span>ostream <span style="color:#f92672">*</span>p_output_;
+</code></pre></div><p>Initialized to <code>nullptr</code> in the implementation:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// Initialization of the display pointer.
+</span><span style="color:#75715e"></span>std<span style="color:#f92672">::</span>ostream <span style="color:#f92672">*</span>Logger<span style="color:#f92672">::</span>p_output_ <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>;
+</code></pre></div><p>And add a public class method to change the output:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">public</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// A function that allows the setting of the logger output.
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// Nothing by default.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> set_output(std<span style="color:#f92672">::</span>ostream <span style="color:#f92672">*</span>p_output <span style="color:#f92672">=</span> <span style="color:#66d9ef">nullptr</span>);
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> Logger<span style="color:#f92672">::</span>set_output(std<span style="color:#f92672">::</span>ostream <span style="color:#f92672">*</span>p_output) {
+  p_output_ <span style="color:#f92672">=</span> p_output;
+}
+</code></pre></div><p>The <code>p_output_</code> pointer must be initialized outside the class.
+It&rsquo;s a C++ limitation that I regret.</p>
+<h3 id="output-protection">Output protection</h3>
+<p>In our code, we currently have a critical resource that is not protected: the output pointed to by <code>p_output_</code>.
+The simple answer to protecting a resource is to use the  <a href="https://en.cppreference.com/w/cpp/thread/mutex"><code>std::mutex</code> class</a>:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"> <span style="color:#66d9ef">private</span><span style="color:#f92672">:</span>
+  <span style="color:#75715e">// A mutex to protect the display resource.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">static</span> std<span style="color:#f92672">::</span>mutex output_mutex_;
+</code></pre></div><p>Initialized in the implementation:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// Initialization of the display protection mutex.
+</span><span style="color:#75715e"></span>std<span style="color:#f92672">::</span>mutex Logger<span style="color:#f92672">::</span>output_mutex_;
+</code></pre></div><p>Nevertheless, C+++11 includes thread library support, with more specific blocking mechanisms, in particular, the <a href="https://en.cppreference.com/w/cpp/thread/lock_guard"><code>std::lock_guard</code> class</a>, which locks a mutex until the end of the scope:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> Logger<span style="color:#f92672">::</span>set_output(std<span style="color:#f92672">::</span>ostream <span style="color:#f92672">*</span>p_output) {
+  <span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;&amp;</span>lock __attribute__((unused)) <span style="color:#f92672">=</span>
+      std<span style="color:#f92672">::</span>lock_guard<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>mutex<span style="color:#f92672">&gt;</span>(output_mutex_);
+  p_output_ <span style="color:#f92672">=</span> p_output;
+}
+</code></pre></div><div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">void</span> Logger<span style="color:#f92672">::</span>print(Logger<span style="color:#f92672">::</span>level level, <span style="color:#66d9ef">const</span> std<span style="color:#f92672">::</span>string <span style="color:#f92672">&amp;</span>message) {
+  <span style="color:#75715e">// Initializing a string stream.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> ss <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>stringstream();
+
+  <span style="color:#75715e">// Buffering the log level in the string stream.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">switch</span> (level) {
+    <span style="color:#66d9ef">case</span> (INFO)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;INFO&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+    <span style="color:#66d9ef">case</span> (WARN)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;WARN&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+    <span style="color:#66d9ef">case</span> (ERROR)<span style="color:#f92672">:</span>ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;ERROR&#34;</span>;
+      <span style="color:#66d9ef">break</span>;
+  }
+  <span style="color:#75715e">// Buffering the message in the string stream.
+</span><span style="color:#75715e"></span>  ss <span style="color:#f92672">&lt;&lt;</span> <span style="color:#e6db74">&#34;: &#34;</span> <span style="color:#f92672">&lt;&lt;</span> message;
+
+  <span style="color:#75715e">// Waiting for output access.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;&amp;</span>lock __attribute__((unused)) <span style="color:#f92672">=</span>
+      std<span style="color:#f92672">::</span>lock_guard<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span>mutex<span style="color:#f92672">&gt;</span>(output_mutex_);
+  <span style="color:#66d9ef">if</span> (p_output_ <span style="color:#f92672">!=</span> <span style="color:#66d9ef">nullptr</span>) {
+    <span style="color:#75715e">// If the output is set, then display the string stream.
+</span><span style="color:#75715e"></span>    (<span style="color:#f92672">*</span>p_output_) <span style="color:#f92672">&lt;&lt;</span> ss.rdbuf() <span style="color:#f92672">&lt;&lt;</span> std<span style="color:#f92672">::</span>endl;
+  }
+
+  <span style="color:#75715e">// In a real application, log might also be saved in file.
+</span><span style="color:#75715e"></span>}
+</code></pre></div><h3 id="logger-class-final-result">Logger class final result</h3>
+<p>You can find on GitHub the final result of the Logger class <a href="https://github.com/hnrck/singleton_example/blob/master/include/Logger.h">header</a> and <a href="https://github.com/hnrck/singleton_example/blob/master/srcs/Logger.cpp">implementation</a>.</p>
+<p> </p>
+<h2 id="test-application">Test application</h2>
+<p>A small program repeatedly calling the print method of the logger instance concurrently is built to test our singleton Logger.</p>
+<h3 id="global-parameters">Global parameters</h3>
+<p>First of all, the limits of our program are set through global parameters.
+We will set a maximum number of threads, no need to go beyond 1000 threads.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// An arbitrary maximum number of threads.
+</span><span style="color:#75715e"></span><span style="color:#75715e">#define MAX_NB_THREADS 1000
+</span></code></pre></div><h3 id="test-routine">Test routine</h3>
+<p>Then, a small routine that retrieves the instance of the Logger, generates a level and a message, waits for 10 milliseconds, and then calls the print method is implemented:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// A simple test routine.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">test_routine</span>(<span style="color:#66d9ef">int</span> i) {
+  <span style="color:#75715e">// Getting the logger instance.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;</span>logger <span style="color:#f92672">=</span> Logger<span style="color:#f92672">::</span>get_instance();
+
+  <span style="color:#75715e">// Generating a level from i, with a round-robin strategy.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">auto</span> level <span style="color:#f92672">=</span>
+      <span style="color:#66d9ef">static_cast</span><span style="color:#f92672">&lt;</span>Logger<span style="color:#f92672">::</span>level<span style="color:#f92672">&gt;</span>(Logger<span style="color:#f92672">::</span>INFO
+          <span style="color:#f92672">+</span> i <span style="color:#f92672">%</span> (Logger<span style="color:#f92672">::</span>ERROR <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> Logger<span style="color:#f92672">::</span>INFO));
+
+  <span style="color:#75715e">// Generating a message from i.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">auto</span> message <span style="color:#f92672">=</span>
+      std<span style="color:#f92672">::</span>string(<span style="color:#e6db74">&#34;this is the message n° &#34;</span> <span style="color:#f92672">+</span> std<span style="color:#f92672">::</span>to_string(i) <span style="color:#f92672">+</span> <span style="color:#e6db74">&#34;.&#34;</span>);
+
+  <span style="color:#75715e">// Waiting for 10ms.
+</span><span style="color:#75715e"></span>  std<span style="color:#f92672">::</span>this_thread<span style="color:#f92672">::</span>sleep_for(std<span style="color:#f92672">::</span>chrono<span style="color:#f92672">::</span>milliseconds(<span style="color:#ae81ff">10</span>));
+
+  <span style="color:#75715e">// Logging the message with a the round-robin logger level.
+</span><span style="color:#75715e"></span>  logger.print(level, message);
+}
+</code></pre></div><h3 id="a-small-exception">A small exception</h3>
+<p>Finally, for cleanliness, we create an exception to return if the program user forgets to enter the number of threads.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#75715e">// An exception to use when the main class does not have enough argument.
+</span><span style="color:#75715e"></span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">missing_argument</span> <span style="color:#66d9ef">final</span> <span style="color:#f92672">:</span> <span style="color:#66d9ef">public</span> std<span style="color:#f92672">::</span>exception {};
+</code></pre></div><h3 id="main-function">Main function</h3>
+<p>All the bricks are now ready for our application.
+First, we start the main body, and set the future exit code:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp"><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">main</span>(<span style="color:#66d9ef">int</span> argc, <span style="color:#66d9ef">char</span> <span style="color:#66d9ef">const</span> <span style="color:#f92672">*</span>argv[]) {
+  <span style="color:#75715e">// Initializing the program exit code, success by default.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> exit_code <span style="color:#f92672">=</span> <span style="color:#66d9ef">int</span>(EXIT_SUCCESS);
+</code></pre></div><p>Then we retrieve the instance of our Logger, and set the output to the standard error output:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">  <span style="color:#75715e">// Using our logger for error logging.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;</span>logger <span style="color:#f92672">=</span> Logger<span style="color:#f92672">::</span>get_instance();
+
+  <span style="color:#75715e">// Setting the logger output to std::cerr, so the log can be save from
+</span><span style="color:#75715e"></span>  <span style="color:#75715e">// command line using &#34; 2&gt; &lt;log_file&gt;&#34;
+</span><span style="color:#75715e"></span>  Logger<span style="color:#f92672">::</span>set_output(<span style="color:#f92672">&amp;</span>std<span style="color:#f92672">::</span>cerr);
+</code></pre></div><p>We can now parse the user&rsquo;s entry to retrieve the number of threads to launch.
+We are preparing to potentially receive an error from this parsing with a <code>try {...} catch</code> block, in which case we can use our logger instance to display an error message.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">  <span style="color:#66d9ef">auto</span> arg <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>string();
+
+  <span style="color:#66d9ef">try</span> {
+
+    <span style="color:#75715e">// Checking the number of arguments.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (argc <span style="color:#f92672">&lt;</span> <span style="color:#ae81ff">2</span>) {
+      <span style="color:#66d9ef">throw</span> (missing_argument());
+    }
+    arg.assign(argv[<span style="color:#ae81ff">1</span>]); <span style="color:#75715e">// Pointer arithmetic is a bad practice, but I am lazy.
+</span><span style="color:#75715e"></span>
+    <span style="color:#75715e">// Converting the number of thread from the first argument to an unsigned
+</span><span style="color:#75715e"></span>    <span style="color:#75715e">// int.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">auto</span> nb_threads <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>stoul(arg);
+
+    <span style="color:#66d9ef">if</span> (nb_threads <span style="color:#f92672">&gt;</span> (MAX_NB_THREADS)) {
+      <span style="color:#75715e">// If the number of threads is above MAX_NB_THREADS, throw an error.
+</span><span style="color:#75715e"></span>      <span style="color:#66d9ef">throw</span> (std<span style="color:#f92672">::</span>out_of_range(<span style="color:#e6db74">&#34;&#34;</span>));
+    }
+</code></pre></div><p>We can now launch <code>nb_threads</code> routine:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">    <span style="color:#75715e">// Pre-allocation of the threads vector.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">auto</span> threads <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span>vector<span style="color:#f92672">&lt;</span>std<span style="color:#f92672">::</span><span style="color:#66d9ef">thread</span><span style="color:#f92672">&gt;</span>(nb_threads);
+
+    <span style="color:#75715e">// Initialization of the threads.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0U</span>; i <span style="color:#f92672">&lt;</span> nb_threads; <span style="color:#f92672">++</span>i) {
+      threads[i] <span style="color:#f92672">=</span> std<span style="color:#f92672">::</span><span style="color:#66d9ef">thread</span>(test_routine, i);
+    }
+
+    <span style="color:#75715e">// Joining the threads.
+</span><span style="color:#75715e"></span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">auto</span> <span style="color:#f92672">&amp;</span><span style="color:#66d9ef">thread</span> <span style="color:#f92672">:</span> threads) {
+      <span style="color:#66d9ef">thread</span>.join();
+    }
+</code></pre></div><p>Finally, if everything went well, we can leave the execution of the program.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-cpp" data-lang="cpp">  <span style="color:#75715e">// Exiting the program with the exit code.
+</span><span style="color:#75715e"></span>  <span style="color:#66d9ef">return</span> (exit_code);
+}
+</code></pre></div><h3 id="test-application-final-result">Test application final result</h3>
+<p>The final result of the test application is available on <a href="https://github.com/hnrck/singleton_example/blob/master/app/main.cpp">GitHub</a></p>
+<hr>
+<h1 id="experimentation">Experimentation</h1>
+<h2 id="github-repository">GitHub repository</h2>
+<p>The code source of the full example available is on <a href="https://github.com/hnrck/singleton_example">hnrck/singleton_example</a>.</p>
+<p>The GitHub repository is structured as following:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">.
+├── app
+│   └── main.cpp
+├── CMakeLists.txt
+├── include
+│   └── Logger.h
+├── LICENSE
+└── srcs
+    └── Logger.cpp
+</code></pre></div><ul>
+<li>app - containing the application <a href="https://github.com/hnrck/singleton_example/blob/master/app/main.cpp"><code>main.cpp</code></a>, using the Logger class.</li>
+<li><a href="https://github.com/hnrck/singleton_example/blob/master/CMakeLists.txt"><code>CMakeLists.txt</code></a> - allowing to build the project quickly.</li>
+<li>include - containing the <a href="https://github.com/hnrck/singleton_example/blob/master/include/Logger.h">Logger header</a>.</li>
+<li><a href="https://github.com/hnrck/singleton_example/blob/master/LICENSE"><code>LICENSE</code></a> - the license of the project.</li>
+<li>srcs - containing the <a href="https://github.com/hnrck/singleton_example/blob/master/srcs/Logger.cpp">Logger implementation</a>.</li>
+</ul>
+<p>To test the project, the easiest way is to clone the github repository:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">git clone https://github.com/hnrck/singleton_example.git
+</code></pre></div><p> </p>
+<h2 id="compilation">Compilation</h2>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd singleton_example
+mkdir build
+cd build
+cmake ..
+cmake --build . 
+</code></pre></div><p>These commands build the logger library <code>liblogger.so.1.0.0</code> in <code>singleton_example/build/usr/lib/</code> and an executable <code>main</code> in <code>singleton_example/build/usr/bin/</code>.</p>
+<p><em>Alternative</em></p>
+<p>As a huge big fan of clang and ninja, I use the following commands.
+In the future, I will try to make an article to explain my tool preferences.</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cd singleton_example
+mkdir build
+cd build
+cmake -G <span style="color:#e6db74">&#34;Ninja&#34;</span> -DCMAKE_CXX_COMPILER<span style="color:#f92672">=</span>clang++ ..
+cmake --build . 
+</code></pre></div><p> </p>
+<h2 id="execution">Execution</h2>
+<p>From <code>singleton_example/build/</code>, the main application can be executed with:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">usr/bin/main &lt;number of thread&gt; 2&gt; &lt;log file&gt;
+</code></pre></div><p>Where <code>&lt;number of thread&gt;</code> is a number from 0 to 1000. Trying to enter incorrect values causes errors, but that is not the point of this article
+And <code>&lt;log file&gt;</code> is the file where the log will be written</p>
+<p><em>Note:</em></p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">usr/bin/main &lt;number of thread&gt;
+</code></pre></div><p><em>Will output the logs in the terminal.</em></p>
+<p>For instance:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">usr/bin/main <span style="color:#ae81ff">10</span> 2&gt; log.txt
+</code></pre></div><p>returns on the terminal:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">Logger singleton example.
+Take a number of thread from first argument (from 0 to 1000), and execute concurrently simple routines.
+Setting the logger output to std::cerr, so the log can be extracted and saved in a file.
+Creating  and joining 10 threads.
+All the threads finished their routines.
+Done with success.
+</code></pre></div><p>and <code>log.txt</code> contains:</p>
+<div class="highlight"><pre style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-fallback" data-lang="fallback">WARN: this is the message n° 1.
+INFO: this is the message n° 0.
+ERROR: this is the message n° 2.
+INFO: this is the message n° 3.
+WARN: this is the message n° 4.
+ERROR: this is the message n° 5.
+INFO: this is the message n° 6.
+WARN: this is the message n° 7.
+ERROR: this is the message n° 8.
+INFO: this is the message n° 9.
+</code></pre></div><p>Video of the demo on <a href="https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm">asciinema</a>:</p>
+<p><a href="https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm"><img src="https://asciinema.org/a/6FnXYa8zZV1tpdK2RyxAF7Xbm.svg" alt="asciicast"></a></p>
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<!-- raw HTML omitted -->
+<hr>
+<h1 id="conclusion">Conclusion</h1>
+<h2 id="summary">Summary</h2>
+<p>I hope you had as much fun reading this article as I did writing it.</p>
+<p>Design patterns are essential building blocks of software engineering.
+In this article, we presented one of the most simple design patterns, the singleton.</p>
+<p>C++ does not have direct support for these design patterns, and recent modernizations do not provide this support.
+Nevertheless, modern C++ best practices allow an explicit and beautiful implementation of the singleton design pattern.</p>
+<p> </p>
+<h2 id="limitations">Limitations</h2>
+<p>First of all, the singleton I decided to illustrate in this article is often considered as bad practice.</p>
+<p>Then, the Logger class and main application I built are very simplistic examples. The Internet is full of examples of more interesting applications.</p>
+<p> </p>
+<h2 id="future-work">Future work</h2>
+<p>In any order, I would like to write articles about other design patterns implementation, write articles about the C++ tools I used, and write articles about my C++ preferred resources.</p>
+<hr>
+
+		</section>
+
+		<div class="post-tags">
+			
+			
+			<nav class="nav tags">
+				<ul class="tags">
+					
+					<li><a href="/blog/tags/c&#43;&#43;">c&#43;&#43;</a></li>
+					
+					<li><a href="/blog/tags/c&#43;&#43;11">c&#43;&#43;11</a></li>
+					
+					<li><a href="/blog/tags/design-pattern">design pattern</a></li>
+					
+					<li><a href="/blog/tags/singleton">singleton</a></li>
+					
+					<li><a href="/blog/tags/github">github</a></li>
+					
+				</ul>
+			</nav>
+			
+			
+		</div>
+	</article>
+</main>
+<footer>
+<hr><a class="soc" href="https://hnrck.io/" title="Web"><i data-feather="home"></i></a>|<a class="soc" href="https://github.com/hnrck/" title="GitHub"><i data-feather="github"></i></a>|<a class="soc" href="https://github.com/dhnrck/" title="Twitter"><i data-feather="twitter"></i></a>|<a class="soc" href="https://www.linkedin.com/in/henrick-deschamps" title="LinkedIn"><i data-feather="linkedin"></i></a>|<a class="soc" href="mailto://contact@hnrck.io" title="Mail"><i data-feather="mail"></i></a>|⚡️
+	2020  © Henrick Deschamps |  <a href="https://github.com/athul/archie">Archie Theme</a> | Built with <a href="https://gohugo.io">Hugo</a>
+</footer>
+
+
+<script>
+      feather.replace()
+</script>
+
+</div>
+    </body>
+</html>

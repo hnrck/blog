@@ -1,34 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>Henrick Deschamps</title>
-    <link>https://hnrck.io/blog/</link>
-    <description>Recent content on Henrick Deschamps</description>
+    <title>github on Henrick Deschamps</title>
+    <link>https://hnrck.io/blog/tags/github/</link>
+    <description>Recent content in github on Henrick Deschamps</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Henrick Deschamps</copyright>
-    <lastBuildDate>Sat, 16 May 2020 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Mon, 05 Nov 2018 00:00:00 +0000</lastBuildDate>
     
-	<atom:link href="https://hnrck.io/blog/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://hnrck.io/blog/tags/github/index.xml" rel="self" type="application/rss+xml" />
     
-    
-    <item>
-      <title>About</title>
-      <link>https://hnrck.io/blog/about/</link>
-      <pubDate>Sat, 16 May 2020 00:00:00 +0000</pubDate>
-      
-      <guid>https://hnrck.io/blog/about/</guid>
-      <description></description>
-    </item>
-    
-    <item>
-      <title></title>
-      <link>https://hnrck.io/blog/archives/</link>
-      <pubDate>Tue, 28 May 2019 00:00:00 +0000</pubDate>
-      
-      <guid>https://hnrck.io/blog/archives/</guid>
-      <description></description>
-    </item>
     
     <item>
       <title>Modern C&#43;&#43; singleton implementation through an example</title>

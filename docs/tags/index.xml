@@ -7,9 +7,55 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Henrick Deschamps</copyright>
+    <lastBuildDate>Mon, 05 Nov 2018 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://hnrck.io/blog/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>c&#43;&#43;</title>
+      <link>https://hnrck.io/blog/tags/c&#43;&#43;/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/tags/c&#43;&#43;/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>c&#43;&#43;11</title>
+      <link>https://hnrck.io/blog/tags/c&#43;&#43;11/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/tags/c&#43;&#43;11/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>design pattern</title>
+      <link>https://hnrck.io/blog/tags/design-pattern/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/tags/design-pattern/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>github</title>
+      <link>https://hnrck.io/blog/tags/github/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/tags/github/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>singleton</title>
+      <link>https://hnrck.io/blog/tags/singleton/</link>
+      <pubDate>Mon, 05 Nov 2018 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/tags/singleton/</guid>
+      <description></description>
+    </item>
     
   </channel>
 </rss>
