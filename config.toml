@@ -14,7 +14,7 @@ pygmentscodefencesguesssyntax = true
 paginate=3 # articles per page
 
 [params]
-	mode="auto" # color-mode → light,dark or auto
+	mode="dark" # color-mode → light,dark or auto
 	featherIconsCDN=true
 	subtitle = "Minimal and Clean blog"
 
