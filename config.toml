@@ -1,7 +1,69 @@
-baseurl = "https://hnrck.io/blog"
-disableKinds = ["page", "section", "taxonomy", "taxonomyTerm", "RSS", "sitemap", "robotsTXT", "404"]
+baseURL = "https://hnrck.io/blog/"
 languageCode = "en-us"
+title = "Henrick Deschamps"
 theme = "archie"
 themesDir = "themes"
-title = "Henrick Deschamps"
 publishDir = "docs"
+copyright = "© Henrick Deschamps"
+
+# Code Highlight
+pygmentsstyle = "monokai"
+pygmentscodefences = true
+pygmentscodefencesguesssyntax = true
+
+paginate=3 # articles per page
+
+[params]
+	mode="auto" # color-mode → light,dark or auto
+	featherIconsCDN=true
+	subtitle = "Minimal and Clean blog"
+
+# Social Tags
+
+[[params.social]]
+name = "Web"
+icon = "home"
+url = "https://hnrck.io/"
+
+[[params.social]]
+name = "GitHub"
+icon = "github"
+url = "https://github.com/hnrck/"
+
+[[params.social]]
+name = "Twitter"
+icon = "twitter"
+url = "https://github.com/dhnrck/"
+
+[[params.social]]
+name = "LinkedIn"
+icon = "linkedin"
+url = "https://www.linkedin.com/in/henrick-deschamps"
+
+[[params.social]]
+name = "Mail"
+icon = "mail"
+url = "mailto://contact@hnrck.io"
+
+# Main menu Items
+
+
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "All posts"
+url = "/posts"
+weight = 2
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 3
+
+[[menu.main]]
+name = "Tags"
+url = "/tags"
+weight = 4
