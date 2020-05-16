@@ -7,7 +7,7 @@ publishDir = "docs"
 copyright = "© Henrick Deschamps"
 
 # Code Highlight
-pygmentsstyle = "monokai"
+pygmentsstyle = "nord"
 pygmentscodefences = true
 pygmentscodefencesguesssyntax = true
 
