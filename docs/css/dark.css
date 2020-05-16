@@ -16,12 +16,11 @@ body {
 }
 
 hr {
-  border-top: 3px dotted var(--hovercolor);
+  border-top: 3px dotted var(--bordercl);
 }
 code {
   background-color: var(--hovercolor);
   color: black;
-  text-decoration: bold;
   padding: 0.1em 0.2em;
 }
 pre {
@@ -31,7 +30,7 @@ pre {
   padding: 1em;
 }
 blockquote {
-  border-color: var(--hovercolor);
+  border-color: var(--bordercl);
 }
 
 h1,
