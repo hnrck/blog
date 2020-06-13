@@ -13,7 +13,7 @@ tags:
 
 ***
 
-Code source of the full example available on [hnrck/legacy_c_example](https://github.com/hnrck/legacy_c_example).
+Code source of the full example available on [hnrck/c-integration-modern-cpp](https://github.com/hnrck/c-integration-modern-cpp).
 
 ***
 
