@@ -1,6 +1,6 @@
 ---
 title: Legacy C in modern C++
-date: 2020-05-19
+date: 2020-06-13
 description: This post deals with the strategy of integrating legacy c code in a modern c++ architecture.
 tags:
 - c
