@@ -1,15 +1,15 @@
 <!DOCTYPE html>
 <html><head>
 	<meta charset="utf-8" />
-	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Legacy C in modern C&#43;&#43; - Henrick Deschamps</title><meta name="viewport" content="width=device-width, initial-scale=1">
-	<meta property="og:title" content="Legacy C in modern C&#43;&#43;" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge"><title>Legacy `C` in modern C&#43;&#43; - Henrick Deschamps</title><meta name="viewport" content="width=device-width, initial-scale=1">
+	<meta property="og:title" content="Legacy `C` in modern C&#43;&#43;" />
 <meta property="og:description" content="This post deals with the strategy of integrating legacy c code in a modern c&#43;&#43; architecture." />
 <meta property="og:type" content="article" />
 <meta property="og:url" content="https://hnrck.io/blog/posts/2020-06-13-1-legacy-c-in-modern-cpp/" />
 <meta property="article:published_time" content="2020-05-19T00:00:00+00:00" />
 <meta property="article:modified_time" content="2020-05-19T00:00:00+00:00" />
 <meta name="twitter:card" content="summary"/>
-<meta name="twitter:title" content="Legacy C in modern C&#43;&#43;"/>
+<meta name="twitter:title" content="Legacy `C` in modern C&#43;&#43;"/>
 <meta name="twitter:description" content="This post deals with the strategy of integrating legacy c code in a modern c&#43;&#43; architecture."/>
 <script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 	<link href="https://fonts.googleapis.com/css2?family=Fira+Sans&display=swap" rel="stylesheet">
@@ -36,13 +36,13 @@
 <main>
 	<article>
 		<div class="title">
-			<h1 class="title">Legacy C in modern C&#43;&#43;</h1>
+			<h1 class="title">Legacy `C` in modern C&#43;&#43;</h1>
 			<div class="meta">Posted on May 19, 2020</div>
 		</div>
 		
 
 		<section class="body">
-			<p><strong>[tl;dr]</strong> The integration of C in C++ was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface C code more cleanly, through OOP or or C++ smart pointers.</p>
+			<p><strong>[tl;dr]</strong> The integration of <code>C</code> in <code>C++</code> was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface <code>C</code> code more cleanly, through OOP or or <code>C++</code> smart pointers.</p>
 <hr>
 <p>Code source of the full example available on <a href="https://github.com/hnrck/legacy_c_example">hnrck/legacy_c_example</a>.</p>
 <hr>
@@ -93,25 +93,25 @@ A simulation model can have a very long lifetime, and today with MBSE approaches
 Here is the compromise I propose: Implementing simulation models in a stable, portable language that can be trusted to be reused as is for decades to come, without modifying a single line of code, and in parallel, improving the simulator to take advantage of technical improvements.
 From my point of view, and if there is a guarantee that the simulation scheduling is mastered, which is what I propose in my thesis, then the best of both worlds will be made use of.</p>
 <p>On the one hand there is a set of models on which it is possible to capitalize and keep an archive for analysis, and on the other hand the performance of the simulation is constantly improving.</p>
-<p>From my point of view, there is only one language that offers confidence in reusability and compatibility, and that is C, 89, ANSI standard.</p>
+<p>From my point of view, there is only one language that offers confidence in reusability and compatibility, and that is <code>C</code>, ANSI standard.</p>
 <p>No matter what architecture is used, no matter what kind of embedded system, no matter how old it is, there is always a way to compile and run C89.
-So the question is, why not develop everything in C89 since it&rsquo;s so good?
-This is a good question, unfortunately the C89 suffers from shortcomings when it comes to quickly implementing a complex architecture&hellip;
-Specifically C89 does not offer the possibility to easily implement object-oriented or functional paradigms, and these are the paradigms that designers use, and they are right to do so.
+So the question is, why not develop everything in <code>C89</code> since it&rsquo;s so good?
+This is a good question, unfortunately the <code>C89</code> suffers from shortcomings when it comes to quickly implementing a complex architecture&hellip;
+Specifically <code>C89</code> does not offer the possibility to easily implement object-oriented or functional paradigms, and these are the paradigms that designers use, and they are right to do so.
 I&rsquo;m the first one to criticize the object-oriented, I think this paradigm is too far from reality, but I must admit that when I design a solution, I rely on it a lot, and it simplifies my job.</p>
-<p>C++ is just one of those languages that implement the object-oriented paradigm, that&rsquo;s the main difference with C, and that&rsquo;s where there is a huge divergence with C.
+<p>C++ is just one of those languages that implement the object-oriented paradigm, that&rsquo;s the main difference with C, and that&rsquo;s where there is a huge divergence with <code>C</code>.
 Beyond the technical question of integration, how to integrate elements designed in one language with its paradigms in another language, with its own paradigms.</p>
 <hr>
 <h1 id="discussions">Discussions</h1>
-<p>When I took up the ROSACE case study for my thesis, a lot of implementation work had already been done on it, including in C.
-I wanted to quickly reuse these C elements, but in a much more modern solution.
-I hesitated between C++ and python, and in the end, it was C++ which answered best to the other needs of my thesis.</p>
+<p>When I took up the ROSACE case study for my thesis, a lot of implementation work had already been done on it, including in <code>C</code>.
+I wanted to quickly reuse these <code>C</code> elements, but in a much more modern solution.
+I hesitated between <code>C++</code> and <code>python</code>, and in the end, it was <code>C++</code> which answered best to the other needs of my thesis.</p>
 <h2 id="integrating-c-in-c">Integrating C in C++</h2>
-<p>Integrating C code into C++ is technically incredibly simple, one just have to use:</p>
+<p>Integrating <code>C</code> code into <code>C++</code> is technically incredibly simple, one just have to use:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#fff;font-weight:bold">extern</span> <span style="color:#0ff;font-weight:bold">&#34;C&#34;</span>
-</code></pre></div><p>Thus, for a function declaration in a C header as following:</p>
+</code></pre></div><p>Thus, for a function declaration in a <code>C</code> header as following:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#fff;font-weight:bold">int</span> old_func(<span style="color:#fff;font-weight:bold">int</span> x);
-</code></pre></div><p>This function can be used in C++ code as in C code:</p>
+</code></pre></div><p>This function can be used in <code>C++</code> code as in <code>C</code> code:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = old_func(<span style="color:#ff0;font-weight:bold">42</span>);
 </code></pre></div><p>As long as the header is included such as in the following:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">extern</span> <span style="color:#0ff;font-weight:bold">&#34;C&#34;</span> {
@@ -130,13 +130,13 @@ I hesitated between C++ and python, and in the end, it was C++ which answered be
 </span></code></pre></div><p>Which is not always the case with legacy code.</p>
 <p>But the question of reuse strategy comes up very quickly.</p>
 <p>Two solutions emerge: either to take over the paradigms of the old language or to implement those of the new one.
-Here in the integration of C89 in C++ (11 at the time of my thesis, but I will use C++20 in this article), it is either a question of choosing the procedural approach and reusing functions in the same way as one would do in C, or using classes to encapsulate.
-Thus, a declared C structure:</p>
+Here in the integration of <code>C89</code> in <code>C++</code> (11 at the time of my thesis, but I will use C++20 in this article), it is either a question of choosing the procedural approach and reusing functions in the same way as one would do in C, or using classes to encapsulate.
+Thus, a declared <code>C</code> structure:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#fff;font-weight:bold">struct</span> old_struct {
     <span style="color:#fff;font-weight:bold">int</span> x;
 };
 <span style="color:#fff;font-weight:bold">typedef</span> <span style="color:#fff;font-weight:bold">struct</span> old_struct old_struct_t;
-</code></pre></div><p>Can be manipulated in C++ as a native C++ struct, i.e. with default constructor and all public members.</p>
+</code></pre></div><p>Can be manipulated in <code>C++</code> as a native <code>C++</code> struct, i.e. with default constructor and all public members.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">auto</span> os = old_struct();
 os.x = <span style="color:#ff0;font-weight:bold">42</span>;
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = os.x;
@@ -151,7 +151,7 @@ old_struct_set_x(&amp;os, <span style="color:#ff0;font-weight:bold">42</span>);
 </code></pre></div><p>More complicated, if the legacy code contains private implementations, such as:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C"><span style="color:#fff;font-weight:bold">struct</span> old_pimpl;
 <span style="color:#fff;font-weight:bold">typedef</span> <span style="color:#fff;font-weight:bold">struct</span> old_pimpl old_pimpl_t;
-</code></pre></div><p>In C++, it will be necessary to manipulate all the allocation, initialization, destruction and manipulation functions as in C.
+</code></pre></div><p>In C++, it will be necessary to manipulate all the allocation, initialization, destruction and manipulation functions as in <code>C</code>.
 Here let&rsquo;s consider these functions:</p>
 <p>Allocation and initialization:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C" data-lang="C">old_pimpl_t *old_pimpl_new();
@@ -166,7 +166,7 @@ old_pimpl_set_x(p_op, <span style="color:#ff0;font-weight:bold">42</span>);
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = old_pimpl_get_x(p_op);
 old_pimpl_del(p_op);
 </code></pre></div><h2 id="wrapped-integration">Wrapped integration</h2>
-<p>The obvious solution to avoid inheriting the cumbersome use of C is to adapt the old structures and interface with a single class.
+<p>The obvious solution to avoid inheriting the cumbersome use of <code>C</code> is to adapt the old structures and interface with a single class.
 For our old_struct, the OldStructWrapper class can be declared.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">class</span> OldStructWrapper <span style="color:#fff;font-weight:bold">final</span> {
 <span style="color:#007f7f">// ...
@@ -178,7 +178,7 @@ For our old_struct, the OldStructWrapper class can be declared.</p>
     old_struct os;
 <span style="color:#007f7f">// ...
 </span><span style="color:#007f7f"></span>};
-</code></pre></div><p>Data manipulation can be hidden behind methods to get the most out of C++.
+</code></pre></div><p>Data manipulation can be hidden behind methods to get the most out of <code>C++</code>.
 The client of the OldStructWrapper class will not have to explicitly manipulate pointers and references:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">class</span> OldStructWrapper <span style="color:#fff;font-weight:bold">final</span> {
 <span style="color:#007f7f">// ...
@@ -271,7 +271,7 @@ For aggregation, the compiler can&rsquo;t know the size in memory at compile tim
         <span style="color:#fff;font-weight:bold">return</span> *<span style="color:#fff;font-weight:bold">this</span>;
     }
 <span style="color:#007f7f">// ...
-</span></code></pre></div><p>As well as moving the memory in the move of the wrappers:</p>
+</span></code></pre></div><p>As well as moving the memory in the move constructor / assignment of the wrappers:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">class</span> OldPimplWrapper <span style="color:#fff;font-weight:bold">final</span> {
 <span style="color:#007f7f">// ...
 </span><span style="color:#007f7f"></span><span style="color:#fff;font-weight:bold">public</span>:
@@ -373,7 +373,7 @@ os.set_x(<span style="color:#ff0;font-weight:bold">42</span>);
 </code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">auto</span> op = OldPimplWrapper();
 op.set_x(<span style="color:#ff0;font-weight:bold">42</span>);
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = op.get_x();
-</code></pre></div><p>And  copy / move constructor / assignment help the client with high level memory manipulation, especially for the fan of &lsquo;}&rsquo; as the best destructor.</p>
+</code></pre></div><p>And  copy / move constructor / assignment help the client with high level memory manipulation, especially for the fan of &lsquo;<code>}</code>&rsquo; as the best destructor.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++">OldStructWrapper os_cpy_1;
 OldStructWrapper os_cpy_2;
 
@@ -404,10 +404,10 @@ op_cpy_2.set_x(<span style="color:#ff0;font-weight:bold">24</span>);
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X_2 = op_cpy_2.get_x();
 </code></pre></div><h2 id="smart-pointers-integration">Smart pointers integration</h2>
 <p>What has just been presented is an integration solution based on the use of classes to hide the complexity of memory management, while providing cleaner access to data manipulation.
-Access to data manipulation is just a plus and the key is to improve memory management, and in modern C++ a native solution exists.
+Access to data manipulation is just a plus and the key is to improve memory management, and in modern <code>C++</code> a native solution exists.
 It is called smart pointers.
 Smart pointers are one of the mechanics of RAII, whose objective is to create a notion of data ownership.
-When the owner of a single pointer is destroyed (end of scope or end of life of an object), the single pointer is also destroyed, which is perfect for the fans of &lsquo;}&rsquo; as the best destuctor.
+When the owner of a single pointer is destroyed (end of scope or end of life of an object), the single pointer is also destroyed, which is perfect for the fans of &lsquo;<code>}</code>&rsquo; as the best destuctor.
 Use of smart pointers is very simple, the declaration of aliases can be done this way:</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">using</span> UpOldStruct = std::unique_ptr&lt;old_struct&gt;;
 </code></pre></div><p>Allocation and initialization can be even be done in a single instruction using standard library tools:</p>
@@ -466,9 +466,9 @@ cmake --build c-integration-modern-cpp-build -t all
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-bash" data-lang="bash">cmake --build c-integration-modern-cpp-build -t <span style="color:#fff;font-weight:bold">test</span>
 </code></pre></div><p><a href="https://asciinema.org/a/orjHjbV7VHNKdRH8j1WF526UX"><img src="https://asciinema.org/a/orjHjbV7VHNKdRH8j1WF526UX.svg" alt="asciicast"></a></p>
 <h1 id="conclusion">Conclusion</h1>
-<p>The integration of C in C++ was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access.
+<p>The integration of <code>C</code> in <code>C++</code> was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access.
 When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable.
-There are solutions to interface C code more cleanly, through classes or smart pointers.
+There are solutions to interface <code>C</code> code more cleanly, through classes or smart pointers.
 None of these solutions is perfect and all of them have limitations, but they have their advantages that we will summarize in the following paragraph.</p>
 <h2 id="summary">Summary</h2>
 <table>
