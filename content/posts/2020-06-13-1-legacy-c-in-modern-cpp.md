@@ -1,7 +1,7 @@
 ---
 title: Legacy C in modern C++
 date: 2020-06-13
-description: This post deals with the strategy of integration of old C code in a modern C++ architecture, beyond the technical point of view in the strategic aspect.
+description: This post deals with the strategy of integration of old C code in a modern C++ architecture, beyond the technical point of view.
 tags:
 - c
 - c++
