@@ -103,7 +103,7 @@ I&rsquo;m the first one to criticize the object-oriented, I think this paradigm 
 Beyond the technical question of integration, how to integrate elements designed in one language with its paradigms in another language, with its own paradigms.</p>
 <hr>
 <h1 id="discussions">Discussions</h1>
-<p>When I took up the ROSACE case study for my thesis, a lot of implementation work had already been done on it, including in <code>C</code>.
+<p>When I took up the <code>ROSACE</code> case study for my thesis, a lot of implementation work had already been done on it, including in <code>C</code>.
 I wanted to quickly reuse these <code>C</code> elements, but in a much more modern solution.
 I hesitated between <code>C++</code> and <code>python</code>, and in the end, it was <code>C++</code> which answered best to the other needs of my thesis.</p>
 <h2 id="integrating-c-in-c">Integrating C in C++</h2>
@@ -492,6 +492,10 @@ None of these solutions is perfect and all of them have limitations, but they ha
 </tr>
 </tbody>
 </table>
+<h2 id="final-word">Final word</h2>
+<p>For <code>RROSACE</code>, the simulation model library was written in <code>C89</code>, and the simulation framework in <code>C++11</code>.</p>
+<p>My first strategy was to use the least amount of code to lighten maintenance, so I preferred smart pointers.
+Before presenting my work and publishing the code, I revised my strategy and switched to wrapping, which has another implicit advantage, that of not having to explain the mechanics of smart pointers and RAII to the audience.</p>
 
 		</section>
 
