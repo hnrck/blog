@@ -7,10 +7,19 @@
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <copyright>© Henrick Deschamps</copyright>
-    <lastBuildDate>Mon, 05 Nov 2018 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 19 May 2020 00:00:00 +0000</lastBuildDate>
     
 	<atom:link href="https://hnrck.io/blog/posts/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Legacy C in modern C&#43;&#43;</title>
+      <link>https://hnrck.io/blog/posts/2020-06-13-1-legacy-c-in-modern-cpp/</link>
+      <pubDate>Tue, 19 May 2020 00:00:00 +0000</pubDate>
+      
+      <guid>https://hnrck.io/blog/posts/2020-06-13-1-legacy-c-in-modern-cpp/</guid>
+      <description>[tl;dr] The integration of C in C++ was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface C code more cleanly, through OOC or or C++ smart pointers.</description>
+    </item>
     
     <item>
       <title>Modern C&#43;&#43; singleton implementation through an example</title>
