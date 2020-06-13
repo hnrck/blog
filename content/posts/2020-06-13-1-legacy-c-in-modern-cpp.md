@@ -32,6 +32,7 @@ Code source of the full example available on [hnrck/legacy_c_example](https://gi
   * [Execution](#execution)
 * [Conclusion](#conclusion)
   * [Summary](#summary)
+  * [Final word](#final-word)
 
 ***
 
