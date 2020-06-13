@@ -51,6 +51,13 @@
 <li><a href="#motivations">Motivations</a></li>
 <li><a href="#context">Context</a></li>
 <li><a href="#introduction">Introduction</a></li>
+<li><a href="#discussions">Discussion</a>
+<ul>
+<li><a href="#integrating-c-in-c++">Integrating C in C++</a></li>
+<li><a href="#wrapped-integration">Wrapped integration</a></li>
+<li><a href="#smart-pointers-integration">Smart pointers integration</a></li>
+</ul>
+</li>
 <li><a href="#experimentation">Experimentation</a>
 <ul>
 <li><a href="#github-repository">GitHub repository</a></li>
@@ -94,6 +101,7 @@ Specifically C89 does not offer the possibility to easily implement object-orien
 I&rsquo;m the first one to criticize the object-oriented, I think this paradigm is too far from reality, but I must admit that when I design a solution, I rely on it a lot, and it simplifies my job.</p>
 <p>C++ is just one of those languages that implement the object-oriented paradigm, that&rsquo;s the main difference with C, and that&rsquo;s where there is a huge divergence with C.
 Beyond the technical question of integration, how to integrate elements designed in one language with its paradigms in another language, with its own paradigms.</p>
+<hr>
 <h1 id="discussions">Discussions</h1>
 <p>When I took up the ROSACE case study for my thesis, a lot of implementation work had already been done on it, including in C.
 I wanted to quickly reuse these C elements, but in a much more modern solution.
@@ -157,8 +165,7 @@ Here let&rsquo;s consider these functions:</p>
 old_pimpl_set_x(p_op, <span style="color:#ff0;font-weight:bold">42</span>);
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = old_pimpl_get_x(p_op);
 old_pimpl_del(p_op);
-</code></pre></div><hr>
-<h2 id="wrapped-integration">Wrapped integration</h2>
+</code></pre></div><h2 id="wrapped-integration">Wrapped integration</h2>
 <p>The obvious solution to avoid inheriting the cumbersome use of C is to adapt the old structures and interface with a single class.
 For our old_struct, the OldStructWrapper class can be declared.</p>
 <div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">class</span> OldStructWrapper <span style="color:#fff;font-weight:bold">final</span> {
@@ -395,7 +402,7 @@ op_cpy_2.set_x(<span style="color:#ff0;font-weight:bold">24</span>);
 
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X_1 = op_cpy_1.get_x();
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X_2 = op_cpy_2.get_x();
-</code></pre></div><h2 id="smart-pointer-integration">Smart pointer integration</h2>
+</code></pre></div><h2 id="smart-pointers-integration">Smart pointers integration</h2>
 <p>What has just been presented is an integration solution based on the use of classes to hide the complexity of memory management, while providing cleaner access to data manipulation.
 Access to data manipulation is just a plus and the key is to improve memory management, and in modern C++ a native solution exists.
 It is called smart pointers.
@@ -424,7 +431,8 @@ old_struct_set_x(sp_os.get(), <span style="color:#ff0;font-weight:bold">42</span
 </code></pre></div><div class="highlight"><pre style="color:#e5e5e5;background-color:#000;-moz-tab-size:4;-o-tab-size:4;tab-size:4"><code class="language-C++" data-lang="C++"><span style="color:#fff;font-weight:bold">auto</span> sp_op = std::shared_ptr&lt;old_pimpl&gt;(old_pimpl_new(), old_pimpl_del);
 old_pimpl_set_x(sp_op.get(), <span style="color:#ff0;font-weight:bold">42</span>);
 <span style="color:#fff;font-weight:bold">const</span> <span style="color:#fff;font-weight:bold">auto</span> X = old_pimpl_get_x(sp_op.get());
-</code></pre></div><h1 id="experimentation">Experimentation</h1>
+</code></pre></div><hr>
+<h1 id="experimentation">Experimentation</h1>
 <h2 id="github-repository">GitHub repository</h2>
 <p>The code source of the full example available is on <a href="https://github.com/hnrck/c-integration-modern-cpp">hnrck/c-integration-modern-cpp</a>.</p>
 <p>The GitHub repository is structured as following:</p>
