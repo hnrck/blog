@@ -3,12 +3,13 @@ title: Legacy C in modern C++
 date: 2020-05-19
 description: This post deals with the strategy of integrating legacy c code in a modern c++ architecture.
 tags:
+- c
 - c++
 - c++20
-- c
+- github
 
 ---
-**\[tl;dr\]** The integration of C in C++ was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface C code more cleanly, through OOC or or C++ smart pointers.
+**\[tl;dr\]** The integration of C in C++ was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface C code more cleanly, through OOP or or C++ smart pointers.
 
 ***
 
