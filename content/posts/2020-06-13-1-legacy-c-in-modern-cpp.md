@@ -1,5 +1,5 @@
 ---
-title: Legacy `C` in modern C++
+title: Legacy C in modern C++
 date: 2020-05-19
 description: This post deals with the strategy of integrating legacy c code in a modern c++ architecture.
 tags:
@@ -9,7 +9,7 @@ tags:
 - github
 
 ---
-**\[tl;dr\]** The integration of `C` in `C++` was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface `C` code more cleanly, through OOP or or `C++` smart pointers.
+**\[tl;dr\]** The integration of `C` in `C++` was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access. When integrating into modern `C++`, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable. There are solutions to interface `C` code more cleanly, through OOP or or `C++` smart pointers.
 
 ***
 
@@ -75,7 +75,7 @@ This is a good question, unfortunately the `C89` suffers from shortcomings when 
 Specifically `C89` does not offer the possibility to easily implement object-oriented or functional paradigms, and these are the paradigms that designers use, and they are right to do so.
 I'm the first one to criticize the object-oriented, I think this paradigm is too far from reality, but I must admit that when I design a solution, I rely on it a lot, and it simplifies my job.
 
-C++ is just one of those languages that implement the object-oriented paradigm, that's the main difference with C, and that's where there is a huge divergence with `C`.
+`C++` is just one of those languages that implement the object-oriented paradigm, that's the main difference with `C`, and that's where there is a huge divergence with `C`.
 Beyond the technical question of integration, how to integrate elements designed in one language with its paradigms in another language, with its own paradigms.
 
 ***
@@ -128,7 +128,7 @@ Which is not always the case with legacy code.
 But the question of reuse strategy comes up very quickly.
 
 Two solutions emerge: either to take over the paradigms of the old language or to implement those of the new one.
-Here in the integration of `C89` in `C++` (11 at the time of my thesis, but I will use C++20 in this article), it is either a question of choosing the procedural approach and reusing functions in the same way as one would do in C, or using classes to encapsulate.
+Here in the integration of `C89` in `C++` (11 at the time of my thesis, but I will use C++20 in this article), it is either a question of choosing the procedural approach and reusing functions in the same way as one would do in `C`, or using classes to encapsulate.
 Thus, a declared `C` structure:
 
 ```C
@@ -138,7 +138,7 @@ struct old_struct {
 typedef struct old_struct old_struct_t;
 ```
 
-Can be manipulated in `C++` as a native `C++` struct, i.e. with default constructor and all public members.
+Can be manipulated in `C++` as a native `C++ struct`, i.e. with default constructor and all public members.
 
 ```C++
 auto os = old_struct();
@@ -157,7 +157,7 @@ void old_struct_set_x(old_struct_t *p_old_struct, int x);
 int old_struct_get_x(const old_struct_t *p_old_struct);
 ```
 
-The passage by reference does not exist in C, it will be necessary to switch back to a way of calling the functions on these not so modern structures, directly inherited from C:
+The passage by reference does not exist in `C`, it will be necessary to switch back to a way of calling the functions on these not so modern structures, directly inherited from C:
 
 ```C++
 auto os = old_struct();
@@ -172,7 +172,7 @@ struct old_pimpl;
 typedef struct old_pimpl old_pimpl_t;
 ```
 
-In C++, it will be necessary to manipulate all the allocation, initialization, destruction and manipulation functions as in `C`.
+In `C++`, it will be necessary to manipulate all the allocation, initialization, destruction and manipulation functions as in `C`.
 Here let's consider these functions:
 
 Allocation and initialization:
@@ -205,7 +205,7 @@ old_pimpl_del(p_op);
 ## Wrapped integration
 
 The obvious solution to avoid inheriting the cumbersome use of `C` is to adapt the old structures and interface with a single class.
-For our old_struct, the OldStructWrapper class can be declared.
+For our `old_struct`, the `OldStructWrapper` class can be declared.
 
 ```C++
 class OldStructWrapper final {
@@ -224,7 +224,7 @@ private:
 ```
 
 Data manipulation can be hidden behind methods to get the most out of `C++`.
-The client of the OldStructWrapper class will not have to explicitly manipulate pointers and references:
+The client of the `OldStructWrapper` class will not have to explicitly manipulate pointers and references:
 ```C++
 class OldStructWrapper final {
 // ...
@@ -250,7 +250,7 @@ public:
 };
 ```
 
-The OldStructWrapper class can therefore be completely explicitly implemented:
+The `OldStructWrapper` class can therefore be completely explicitly implemented:
 ```C++
 /// Old struct wrapper
 class OldStructWrapper final {
@@ -380,7 +380,7 @@ public:
 };
 ```
 
-The OldPimplWrapper class can therefore be completely explicitly implemented:
+The `OldPimplWrapper` class can therefore be completely explicitly implemented:
 ```C++
 /// Old private implementation wrapper
 class OldPimplWrapper final {
@@ -526,7 +526,7 @@ auto up_op = UpOldPimpl(old_pimpl_new(), old_pimpl_del);
 old_pimpl_set_x(up_op.get(), 42);
 const auto X = old_pimpl_get_x(up_op.get());
 ```
-Note: as for now, make_unique can not be used with destructor overloading.
+Note: as for now, `make_unique` can not be used with destructor overloading.
 
 The same can be done with shared pointers:
 ```C++
@@ -604,7 +604,7 @@ cmake --build c-integration-modern-cpp-build -t test
 # Conclusion
 
 The integration of `C` in `C++` was designed a long time ago and the mechanisms are efficient but spartan, forcing the client code to take care to manage memory and data access.
-When integrating into modern C++, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable.
+When integrating into modern `C++`, where there is often a culture of good memory management and pointer manipulation, these mechanisms are not comfortable.
 There are solutions to interface `C` code more cleanly, through classes or smart pointers.
 None of these solutions is perfect and all of them have limitations, but they have their advantages that we will summarize in the following paragraph.
 
@@ -614,4 +614,4 @@ None of these solutions is perfect and all of them have limitations, but they ha
 Solution | Benefits | Drawbacks
 ---|---|---
 Wrappers | Consistent use, copy and move of memory can be managed, No explicit pointer manipulation for the customer | Additionnal code to implement and maintain
-Smart pointers | Very little code to implement and maintain, consistent use of smart pointers, clean memory management | Difficult copy, requires the customer to manipulate pointers, make_unique instruction can not be used with private implementation structure
+Smart pointers | Very little code to implement and maintain, consistent use of smart pointers, clean memory management | Difficult copy, requires the customer to manipulate pointers, `make_unique` instruction can not be used with private implementation structure
