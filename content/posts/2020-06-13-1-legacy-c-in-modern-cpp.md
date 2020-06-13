@@ -21,6 +21,10 @@ Code source of the full example available on [hnrck/legacy_c_example](https://gi
 * [Motivations](#motivations)
 * [Context](#context)
 * [Introduction](#introduction)
+* [Discussion](#discussions)
+  * [Integrating C in C++](#integrating-c-in-c++)
+  * [Wrapped integration](#wrapped-integration)
+  * [Smart pointers integration](#smart-pointers-integration)
 * [Experimentation](#experimentation)
   * [GitHub repository](#github-repository)
   * [Compilation](#compilation)
@@ -73,6 +77,7 @@ I'm the first one to criticize the object-oriented, I think this paradigm is too
 C++ is just one of those languages that implement the object-oriented paradigm, that's the main difference with C, and that's where there is a huge divergence with C.
 Beyond the technical question of integration, how to integrate elements designed in one language with its paradigms in another language, with its own paradigms.
 
+***
 
 # Discussions
 
@@ -195,8 +200,6 @@ old_pimpl_set_x(p_op, 42);
 const auto X = old_pimpl_get_x(p_op);
 old_pimpl_del(p_op);
 ```
-
-***
 
 ## Wrapped integration
 
@@ -487,7 +490,7 @@ const auto X_1 = op_cpy_1.get_x();
 const auto X_2 = op_cpy_2.get_x();
 ```
 
-## Smart pointer integration
+## Smart pointers integration
 
 What has just been presented is an integration solution based on the use of classes to hide the complexity of memory management, while providing cleaner access to data manipulation.
 Access to data manipulation is just a plus and the key is to improve memory management, and in modern C++ a native solution exists.
@@ -540,6 +543,8 @@ auto sp_op = std::shared_ptr<old_pimpl>(old_pimpl_new(), old_pimpl_del);
 old_pimpl_set_x(sp_op.get(), 42);
 const auto X = old_pimpl_get_x(sp_op.get());
 ```
+
+***
 
 # Experimentation
 
