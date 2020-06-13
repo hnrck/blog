@@ -82,7 +82,7 @@ Beyond the technical question of integration, how to integrate elements designed
 
 # Discussions
 
-When I took up the ROSACE case study for my thesis, a lot of implementation work had already been done on it, including in `C`.
+When I took up the `ROSACE` case study for my thesis, a lot of implementation work had already been done on it, including in `C`.
 I wanted to quickly reuse these `C` elements, but in a much more modern solution.
 I hesitated between `C++` and `python`, and in the end, it was `C++` which answered best to the other needs of my thesis.
 
@@ -615,3 +615,10 @@ Solution | Benefits | Drawbacks
 ---|---|---
 Wrappers | Consistent use, copy and move of memory can be managed, No explicit pointer manipulation for the customer | Additionnal code to implement and maintain
 Smart pointers | Very little code to implement and maintain, consistent use of smart pointers, clean memory management | Difficult copy, requires the customer to manipulate pointers, `make_unique` instruction can not be used with private implementation structure
+
+## Final word
+
+For `RROSACE`, the simulation model library was written in `C89`, and the simulation framework in `C++11`.
+
+My first strategy was to use the least amount of code to lighten maintenance, so I preferred smart pointers.
+Before presenting my work and publishing the code, I revised my strategy and switched to wrapping, which has another implicit advantage, that of not having to explain the mechanics of smart pointers and RAII to the audience.
